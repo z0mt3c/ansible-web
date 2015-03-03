@@ -2,42 +2,40 @@
 
 var React = require('react'),
     Router = require('react-router'),
-    mui = require('material-ui'),
-    Toolbar = mui.Toolbar,
-    AppBar = mui.AppBar,
-    _ = require('lodash'),
-    ToolbarGroup = mui.ToolbarGroup,
-    DropDownMenu = mui.DropDownMenu,
-    FlatButton = mui.FlatButton;
+    Bootstrap = require('react-bootstrap'),
+    _ = require('lodash');
 
 var pageItems = [
-    {payload: '1', text: 'default', to: 'default'},
-    {payload: '2', text: 'demo', to: 'demo'}
+    {text: 'Default', to: 'default'},
+    {text: 'Demo', to: 'demo'},
+    {text: 'Projects', to: 'project'}
 ];
 
 var Layout = module.exports = React.createClass({
     mixins: [Router.Navigation, Router.State],
 
-    onChangePage: function(e, position, obj) {
-        this.transitionTo(obj.to, obj.params, obj.query);
-    },
-
     render: function() {
         var self = this;
 
-        var index = _.findIndex(pageItems, function(obj) {
-            return self.isActive(obj.to, obj.params, obj.query)
+        var items = _.map(pageItems, function(obj, i) {
+            var isActive = self.isActive(obj.to, obj.params, obj.query);
+            return <Bootstrap.NavItem
+                key={i}
+                onSelect={() => self.transitionTo(obj.to, obj.params, obj.query)}
+                active={isActive}>{obj.text}</Bootstrap.NavItem>;
         });
 
         return (
             <div className="page">
-                <Toolbar className="mui-dark-theme">
-                    <ToolbarGroup key={0} float="left">
-                        <DropDownMenu menuItems={pageItems} onChange={this.onChangePage} selectedIndex={index}/>
-                    </ToolbarGroup>
-                </Toolbar>
+                <Bootstrap.Navbar brand="Demo">
+                    <Bootstrap.Nav>
+                        {items}
+                    </Bootstrap.Nav>
+                </Bootstrap.Navbar>
 
-                <Router.RouteHandler />
+                <div className="container">
+                    <Router.RouteHandler />
+                </div>
             </div>
         );
     }

@@ -1,7 +1,8 @@
 var React = require('react'),
     Router = require('react-router'),
     Link = Router.Link,
-    mui = require('material-ui');
+    Bootstrap = require('react-bootstrap'),
+    Button = Bootstrap.Button;
 
 var Main = module.exports = React.createClass({
     mixins: [Router.Navigation],
@@ -14,7 +15,7 @@ var Main = module.exports = React.createClass({
 
                 <br/>
 
-                <mui.RaisedButton label="Go to demo page" onClick={() => this.transitionTo('demo')} primary={true} />
+                <Button bsStyle="primary" onClick={() => this.transitionTo('demo')} >Primary</Button>
             </div>
         );
     }
