@@ -4,7 +4,7 @@ var React = require('react'),
     Table = Bootstrap.Table,
     _ = require('lodash'),
     $ = require('jquery'),
-    List = require('../../components/list').List;
+    ListElement = require('../../components/list').List;
 
 var columns = [
     {key: 'id', value: 'ID'},
@@ -16,7 +16,7 @@ var Reflux = require('reflux');
 var JobActions = require('../../actions/jobActions');
 var JobStore = require('../../stores/jobStore');
 
-var Main = module.exports = React.createClass({
+var List = React.createClass({
     mixins: [Router.Navigation, Reflux.connect(JobStore, 'list')],
     componentDidMount: function() {
         JobActions.load();
@@ -28,8 +28,26 @@ var Main = module.exports = React.createClass({
                     Jobs
                 </h2>
 
-                <List items={this.state.list} columns={columns}/>
+                <ListElement items={this.state.list} columns={columns}/>
             </div>
         );
     }
 });
+
+var Detail = React.createClass({
+    mixins: [Router.State],
+    componentDidMount: function() {
+        console.log(this.getParams());
+    },
+    render: function() {
+        return (
+            <div className="page-main">
+                <h2>
+                    Job {this.getParams()}
+                </h2>
+            </div>
+        );
+    }
+});
+
+module.exports = {List: List, Detail: Detail};

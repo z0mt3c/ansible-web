@@ -16,7 +16,10 @@ var routes = module.exports = (
         <DefaultRoute handler={DefaultApp} />
         <Route name="default" handler={DefaultApp} path="/" />
         <Route name="demo" handler={DemoApp} path="/demo" />
-        <Route name="project" handler={ProjectApp} path="/projects" />
-        <Route name="job" handler={JobApp} path="/jobs" />
+        <Route name="projects" handler={ProjectApp} path="/projects" />
+        <Route name="jobs" path="/jobs">
+            <DefaultRoute handler={JobApp.List} />
+            <Route name="job" handler={JobApp.Detail} path=":jobId" />
+        </Route>
     </Route>
 );
