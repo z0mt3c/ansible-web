@@ -7,13 +7,20 @@ var React = require('react'),
     List = require('../../components/list').List;
 
 var columns = [
-    { key: 'id', value: 'ID' },
-    { key: 'title', value: 'Title' },
-    { key: 'body', value: 'Body' }
+    {key: 'id', value: 'ID'},
+    {key: 'type', value: 'type'},
+    {key: 'name', value: 'name'}
 ];
 
+var Reflux = require('reflux');
+var JobActions = require('../../actions/jobActions');
+var JobStore = require('../../stores/jobStore');
+
 var Main = module.exports = React.createClass({
-    mixins: [Router.Navigation],
+    mixins: [Router.Navigation, Reflux.connect(JobStore, 'list')],
+    componentDidMount: function() {
+        JobActions.load();
+    },
     render: function() {
         return (
             <div className="page-main">
@@ -21,7 +28,7 @@ var Main = module.exports = React.createClass({
                     Jobs
                 </h2>
 
-                <List url="http://jsonplaceholder.typicode.com/posts" columns={columns}/>
+                <List items={this.state.list} columns={columns}/>
             </div>
         );
     }

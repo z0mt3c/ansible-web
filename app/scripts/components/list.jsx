@@ -25,8 +25,8 @@ var ListItem = React.createClass({
 });
 
 var List = React.createClass({
-    getInitialState: function() {
-        return {items: []};
+    propTypes: {
+        items: React.PropTypes.array
     },
     load: function() {
         $.ajax({
@@ -50,14 +50,13 @@ var List = React.createClass({
         });
     },
     componentDidMount: function() {
-        this.load();
     },
     render: function() {
         var columns = _.map(this.props.columns, function(column, i) {
             return (<td key={i}>{column.value}</td>);
         }.bind(this));
 
-        var items = _.map(this.state.items, function(item) {
+        var items = _.map(this.props.items, function(item) {
             return <ListItem key={item.id} item={item} columns={this.props.columns}/>
         }.bind(this));
 
