@@ -8,8 +8,8 @@ var React = require('react'),
 
 var columns = [
     { key: 'id', value: 'ID' },
-    { key: 'name', value: 'Name' },
-    { key: 'description', value: 'Description' }
+    { key: 'title', value: 'Title' },
+    { key: 'body', value: 'Body' }
 ];
 
 var Main = module.exports = React.createClass({
@@ -21,7 +21,7 @@ var Main = module.exports = React.createClass({
                     Jobs
                 </h2>
 
-                <List url="/api/job" columns={columns}/>
+                <List url="http://jsonplaceholder.typicode.com/posts" columns={columns}/>
             </div>
         );
     }

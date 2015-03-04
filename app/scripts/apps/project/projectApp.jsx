@@ -8,9 +8,9 @@ var React = require('react'),
 
 var columns = [
     { key: 'id', value: 'ID' },
-    { key: 'name', value: 'Name' },
-    { key: 'type', value: 'Type' },
-    { key: 'url', value: 'URL' }
+    { key: 'thumbnailUrl', value: 'Thumbnail' },
+    { key: 'title', value: 'Title' },
+    { key: 'url', value: 'URL' },
 ];
 
 var Main = module.exports = React.createClass({
@@ -22,7 +22,7 @@ var Main = module.exports = React.createClass({
                     Projects
                 </h2>
 
-                <List url="/api/project" columns={columns}/>
+                <List url="http://jsonplaceholder.typicode.com/photos" columns={columns}/>
             </div>
         );
     }
