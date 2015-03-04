@@ -9,8 +9,7 @@ var React = require('react'),
 var columns = [
     { key: 'id', value: 'ID' },
     { key: 'name', value: 'Name' },
-    { key: 'type', value: 'Type' },
-    { key: 'url', value: 'URL' }
+    { key: 'description', value: 'Description' }
 ];
 
 var Main = module.exports = React.createClass({
@@ -19,10 +18,10 @@ var Main = module.exports = React.createClass({
         return (
             <div className="page-main">
                 <h2>
-                    Projects
+                    Jobs
                 </h2>
 
-                <List url="/api/project" columns={columns}/>
+                <List url="/api/job" columns={columns}/>
             </div>
         );
     }

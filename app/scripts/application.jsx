@@ -8,6 +8,7 @@ var React = require('react'),
 var pageItems = [
     {text: 'Default', to: 'default'},
     {text: 'Demo', to: 'demo'},
+    {text: 'Jobs', to: 'job'},
     {text: 'Projects', to: 'project'}
 ];
 
