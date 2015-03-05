@@ -1,6 +1,7 @@
 var React = require('react'),
     Router = require('react-router'),
     Bootstrap = require('react-bootstrap'),
+    Input = Bootstrap.Input,
     Table = Bootstrap.Table,
     _ = require('lodash'),
     $ = require('jquery');
@@ -67,12 +68,20 @@ var Detail = React.createClass({
         var params = this.getParams();
         JobActions.loadItem(params.id);
     },
+    onChange: function(key) {
+        var data = {};
+        //this.setState(data);
+    },
     render: function() {
         return (
             <div className="page-main">
                 <h2>
                     Job: {this.state.item.name}
                 </h2>
+
+                <form>
+                    <Input type="text" value={this.state.item.name} ref="name" onChange={this.onChange.bind(this, 'name')} />
+                </form>
             </div>
         );
     }
