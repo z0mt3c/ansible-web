@@ -2,9 +2,9 @@ var Reflux = require('reflux');
 var reqwest = require('reqwest');
 
 var Actions = Reflux.createActions(
-    ['load', 'add', 'remove', 'update']
+    ['load', 'loadError', 'loadItem', 'loadItemError']
 );
-
+/*
 Actions.add.preEmit = function(job) {
     reqwest({
         method: 'put',
@@ -36,5 +36,6 @@ Actions.update.preEmit = function(job) {
         console.log(arguments);
     });
 };
+*/
 
 module.exports = Actions;

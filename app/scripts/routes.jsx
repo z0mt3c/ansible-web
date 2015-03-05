@@ -10,6 +10,7 @@ var DefaultApp = require('./apps/default/defaultApp.jsx');
 var DemoApp = require('./apps/demo/demoApp.jsx');
 var ProjectApp = require('./apps/project/projectApp.jsx');
 var JobApp = require('./apps/job/jobApp.jsx');
+var NotFound = require('./apps/generic/notFound.jsx');
 
 var routes = module.exports = (
     <Route name="root" handler={App} path="/" ignoreScrollBehavior>
@@ -19,7 +20,8 @@ var routes = module.exports = (
         <Route name="projects" handler={ProjectApp} path="/projects" />
         <Route name="jobs" path="/jobs">
             <DefaultRoute handler={JobApp.List} />
-            <Route name="job" handler={JobApp.Detail} path=":jobId" />
+            <Route name="job" handler={JobApp.Detail} path=":id" />
         </Route>
+        <NotFoundRoute handler={NotFound}/>
     </Route>
 );
