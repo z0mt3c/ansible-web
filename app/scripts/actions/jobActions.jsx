@@ -2,40 +2,39 @@ var Reflux = require('reflux');
 var reqwest = require('reqwest');
 
 var Actions = Reflux.createActions(
-    ['load', 'loadError', 'loadItem', 'loadItemError']
+    {
+        'list': {asyncResult: true},
+        'get': {asyncResult: true},
+        'create': {asyncResult: true},
+        'delete': {asyncResult: true},
+        'update': {asyncResult: true}
+    }
 );
-/*
-Actions.add.preEmit = function(job) {
+
+Actions.create.listen(function(job) {
     reqwest({
-        method: 'put',
+        method: 'post',
         url: '/api/job',
         type: 'json',
         data: job
-    }).then(function() {
-        console.log(arguments);
-    });
-};
+    }).then(this.completed, this.failed);
+});
 
-Actions.remove.preEmit = function(id) {
+Actions.delete.listen(function(id) {
     reqwest({
         method: 'delete',
         url: '/api/job/' + id,
         type: 'json'
-    }).then(function() {
-        console.log(arguments);
-    });
-};
+    }).then(this.completed, this.failed);
+});
 
-Actions.update.preEmit = function(job) {
-    reqwest({
+Actions.update.listen(function(job) {
+    return reqwest({
         method: 'put',
         url: '/api/job/' + job.id,
         type: 'json',
         data: job
-    }).then(function() {
-        console.log(arguments);
-    });
-};
-*/
+    }).then(this.completed, this.failed);
+});
 
 module.exports = Actions;
