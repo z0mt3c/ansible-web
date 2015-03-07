@@ -9,7 +9,7 @@ var pageItems = [
     {text: 'Default', to: 'default'},
     {text: 'Demo', to: 'demo'},
     {text: 'Jobs', to: 'job_list'},
-    {text: 'Projects', to: 'projects'}
+    {text: 'Projects', to: 'project_list'}
 ];
 
 var Layout = module.exports = React.createClass({

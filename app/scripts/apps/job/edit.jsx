@@ -6,11 +6,60 @@ var React = require('react/addons'),
 
 var Reflux = require('reflux');
 var JobActions = require('../../actions/jobActions');
-var JobStores = require('../../stores/jobStores.jsx');
+var JobStores = require('../../stores/jobStores');
+var ProjectActions = require('../../actions/projectActions');
+var ProjectStores = require('../../stores/projectStores');
 
-module.exports = React.createClass({
-    mixins: [Router.Navigation, Router.State, Reflux.connect(JobStores.Get), React.addons.LinkedStateMixin, Reflux.ListenerMixin],
-    componentDidMount: function() {
+var SelectProject = React.createClass({
+    mixins: [Reflux.connect(ProjectStores.List, 'projects')],
+    componentDidMount() {
+        ProjectActions.list();
+    },
+    render() {
+        var options = [{id: '', name: 'Nothing'}].concat(this.state.projects);
+
+        return React.createElement(Input, React.__spread({}, this.props, {
+                type: 'select',
+                ref: 'input',
+                key: 'input'
+            }),
+            _.map(options, function(project) {
+                return (<option value={project.id} key={project.id}>{project.name}</option>);
+            })
+        );
+    }
+});
+
+var SelectPlaybook = React.createClass({
+    mixins: [Reflux.connect(ProjectStores.Files, 'files'), Reflux.connect(JobStores.Get, 'project')],
+    propTypes: {
+        project: React.PropTypes.string
+    },
+    componentDidMount() {
+        ProjectActions.files(this.props.project);
+    },
+    render() {
+        var options = [].concat(this.state.files);
+
+        return React.createElement(Input, React.__spread({}, this.props, {
+                type: 'select',
+                ref: 'input',
+                key: 'input'
+            }),
+            _.map(options, function(file) {
+                return (<option value={file} key={file}>{file}</option>);
+            })
+        );
+    },
+    componentWillReceiveProps: function(nextProps) {
+        ProjectActions.files(nextProps.project);
+    }
+});
+
+
+var JobForm = React.createClass({
+    mixins: [Router.State, Reflux.connect(JobStores.Get), React.addons.LinkedStateMixin, Reflux.ListenerMixin],
+    componentDidMount() {
         var params = this.getParams();
 
         if (params.id) {
@@ -22,16 +71,16 @@ module.exports = React.createClass({
         this.listenTo(JobActions.update.failed, this.failed);
         this.listenTo(JobActions.create.failed, this.failed);
     },
-    completed: function() {
-        this.transitionTo('job_list');
+    completed() {
+        this.props.onSave();
     },
-    failed: function(xhr) {
-        var error = JSON.parse(xhr.response);
+    failed(xhr) {
+        var body = JSON.parse(xhr.response);
         var state = this.state || {};
-        state._error = error;
+        state._error = body;
         this.setState(state);
     },
-    submit: function(e) {
+    submit(e) {
         e.preventDefault();
         var params = this.getParams();
 
@@ -41,18 +90,53 @@ module.exports = React.createClass({
             JobActions.create(this.state);
         }
     },
-    render: function() {
-        var params = this.getParams();
+    render() {
         var error = '';
         var state = this.state;
 
-        function bsStyle(field) {
-            return state._error && state._error.validation.keys.indexOf(field) !== -1 ? 'error' : null;
-        };
+        var bsStyle = {};
 
         if (this.state._error) {
-            error = <Alert bsStyle="danger">{this.state._error.message}</Alert>;
+            var message = this.state._error.message;
+            error = <Alert bsStyle="danger">{message}</Alert>;
+
+            _.reduce(state._error.validation.keys, function(memo, key) {
+                memo[key] = 'error';
+                return memo;
+            }, bsStyle)
         }
+
+        var project = this.state.project;
+        return (
+            <form className="form-horizontal" onSubmit={this.submit}>
+                {error}
+
+                <Input type="text" label="Name" labelClassName="col-xs-2" wrapperClassName="col-xs-10" valueLink={this.linkState('name')} bsStyle={bsStyle.name}/>
+                <Input type="textarea" label="Description" labelClassName="col-xs-2" wrapperClassName="col-xs-10" valueLink={this.linkState('description')} bsStyle={bsStyle.description}/>
+                <SelectProject label="Project" labelClassName="col-xs-2" wrapperClassName="col-xs-10" valueLink={this.linkState('project')} bsStyle={bsStyle.project}/>
+                <SelectPlaybook label="Playbook" labelClassName="col-xs-2" wrapperClassName="col-xs-10" ref="selectPlaybook" project={project} valueLink={this.linkState('playbook')} bsStyle={bsStyle.playbook}/>
+
+                <Input type="select" label="Verbosity" labelClassName="col-xs-2" wrapperClassName="col-xs-10" valueLink={this.linkState('verbosity')} bsStyle={bsStyle.verbosity}>
+                    <option value="default">Default</option>
+                    <option value="verbose">Verbose</option>
+                    <option value="debug">Debug</option>
+                </Input>
+
+                <Input type="submit" value="Save" wrapperClassName="col-xs-offset-2 col-xs-10"/>
+            </form>
+        );
+    }
+});
+
+module.exports = React.createClass({
+    mixins: [Router.Navigation, Router.State],
+    componentDidMount() {
+    },
+    save() {
+        this.transitionTo('job_list');
+    },
+    render() {
+        var params = this.getParams();
 
         return (
             <div className="page-main">
@@ -60,21 +144,7 @@ module.exports = React.createClass({
                     {params.id ? 'Edit job' : 'Create job'}
                 </h2>
 
-                {error}
-
-                <form className="form-horizontal" onSubmit={this.submit}>
-                    <Input type="text" label="Name" labelClassName="col-xs-2" wrapperClassName="col-xs-10" valueLink={this.linkState('name')} bsStyle={bsStyle('name')}/>
-                    <Input type="textarea" label="Description" labelClassName="col-xs-2" wrapperClassName="col-xs-10" valueLink={this.linkState('description')}bsStyle={bsStyle('description')}/>
-                    <Input type="text" label="Project" labelClassName="col-xs-2" wrapperClassName="col-xs-10" valueLink={this.linkState('project')} bsStyle={bsStyle('project')}/>
-                    <Input type="text" label="Playbook" labelClassName="col-xs-2" wrapperClassName="col-xs-10" valueLink={this.linkState('playbook')} bsStyle={bsStyle('playbook')}/>
-                    <Input type="select" label="Verbosity" labelClassName="col-xs-2" wrapperClassName="col-xs-10" valueLink={this.linkState('verbosity')}>
-                        <option value="default">Default</option>
-                        <option value="verbose">Verbose</option>
-                        <option value="debug">Debug</option>
-                    </Input>
-
-                    <Input type="submit" value="Save" wrapperClassName="col-xs-offset-2 col-xs-10"/>
-                </form>
+                <JobForm id={params.id} onSave={this.save} />
             </div>
         );
     }

@@ -4,49 +4,54 @@ var reqwest = require('reqwest');
 var Actions = Reflux.createActions(
     {
         'list': {asyncResult: true},
+        'files': {asyncResult: true},
+        'sync': {asyncResult: true},
         'get': {asyncResult: true},
-        'run': {asyncResult: true},
         'create': {asyncResult: true},
         'delete': {asyncResult: true},
         'update': {asyncResult: true}
     }
 );
 
-Actions.create.listen(function(job) {
+Actions.create.listen(function(project) {
     reqwest({
         method: 'post',
-        url: '/api/job',
+        url: '/api/project',
         type: 'json',
-        data: job
+        data: project
     }).then(this.completed, this.failed);
 });
 
 Actions.delete.listen(function(id) {
     reqwest({
         method: 'delete',
-        url: '/api/job/' + id,
+        url: '/api/project/' + id,
         type: 'json'
     }).then(this.completed, this.failed);
 });
 
-Actions.update.listen(function(job) {
+Actions.update.listen(function(project) {
     return reqwest({
         method: 'put',
-        url: '/api/job/' + job.id,
+        url: '/api/project/' + project.id,
         type: 'json',
-        data: job
+        data: project
     }).then(this.completed, this.failed);
 });
 
-Actions.run.listen(function(id) {
+Actions.sync.listen(function(id) {
     return reqwest({
         method: 'post',
-        url: '/api/job/' + id + '/run',
+        url: '/api/project/' + id + '/sync',
         type: 'json'
     }).then(this.completed, this.failed);
 });
 
-Actions.run.shouldEmit = function(id) {
+Actions.files.shouldEmit = function(id) {
+    return !!id;
+};
+
+Actions.sync.shouldEmit = function(id) {
     return !!id;
 };
 

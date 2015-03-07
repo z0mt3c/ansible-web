@@ -5,30 +5,33 @@ var React = require('react/addons'),
     $ = require('jquery');
 
 var Reflux = require('reflux');
-var JobActions = require('../../actions/jobActions');
-var JobStores = require('../../stores/jobStores');
+var ProjectActions = require('../../actions/projectActions');
+var ProjectStores = require('../../stores/projectStores');
 
-var JobList = React.createClass({
+var ProjectList = React.createClass({
     mixins: [Router.Navigation],
     propTypes: {
         items: React.PropTypes.array
     },
-    run: function(item, e) {
+    edit: function(obj, e) {
+        e.preventDefault();
+        this.transitionTo('project_edit', {id: obj.id});
+    },
+    sync: function(obj, e) {
         e.preventDefault();
         e.stopPropagation();
-        JobActions.run(item.id);
-    },
-    editJob: function(obj) {
-        this.transitionTo('job_edit', {id: obj.id});
+        ProjectActions.sync(obj.id);
     },
     render: function() {
         var items = _.map(this.props.items, function(item) {
-            return (<tr onClick={this.editJob.bind(null, item)} key={item.id}>
+            return (<tr onClick={this.edit.bind(null, item)} key={item.id}>
                 <td>{item.id}</td>
-                <td>{item.type}</td>
                 <td>{item.name}</td>
+                <td>{item.type}</td>
                 <td>{item.description}</td>
-                <td><Button onClick={this.run.bind(null, item)}>RUN</Button></td>
+                <td>{item.url}</td>
+                <td>{item.branch}</td>
+                <td><Button onClick={this.sync.bind(null, item)}>SYNC</Button></td>
             </tr>)
         }.bind(this));
 
@@ -37,9 +40,11 @@ var JobList = React.createClass({
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Type</th>
                         <th>Name</th>
+                        <th>Type</th>
                         <th>Description</th>
+                        <th>Url</th>
+                        <th>Branch</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -52,22 +57,22 @@ var JobList = React.createClass({
 });
 
 module.exports = React.createClass({
-    mixins: [Router.Navigation, Reflux.connect(JobStores.List, 'list')],
+    mixins: [Router.Navigation, Reflux.connect(ProjectStores.List, 'list')],
     componentDidMount: function() {
-        JobActions.list();
+        ProjectActions.list();
     },
-    createJob: function() {
-        this.transitionTo('job_create');
+    createProject: function() {
+        this.transitionTo('project_create');
     },
     render: function() {
         return (
             <div className="page-main">
                 <h2>
-                <Button bsStyle="primary" onClick={this.createJob} className="pull-right">Create new job</Button>
-                    Jobs
+                    <Button bsStyle="primary" onClick={this.createProject} className="pull-right">Create new project</Button>
+                    Projects
                 </h2>
 
-                <JobList items={this.state.list} />
+                <ProjectList items={this.state.list} />
             </div>
         );
     }
