@@ -16,7 +16,7 @@ var Actions = Reflux.createActions(
 Actions.create.listen(function(project) {
     reqwest({
         method: 'post',
-        url: '/api/project',
+        url: '/api/repository',
         type: 'json',
         data: project
     }).then(this.completed, this.failed);
@@ -25,7 +25,7 @@ Actions.create.listen(function(project) {
 Actions.delete.listen(function(id) {
     reqwest({
         method: 'delete',
-        url: '/api/project/' + id,
+        url: '/api/repository/' + id,
         type: 'json'
     }).then(this.completed, this.failed);
 });
@@ -33,7 +33,7 @@ Actions.delete.listen(function(id) {
 Actions.update.listen(function(project) {
     return reqwest({
         method: 'put',
-        url: '/api/project/' + project.id,
+        url: '/api/repository/' + project.id,
         type: 'json',
         data: project
     }).then(this.completed, this.failed);
@@ -42,7 +42,7 @@ Actions.update.listen(function(project) {
 Actions.sync.listen(function(id) {
     return reqwest({
         method: 'post',
-        url: '/api/project/' + id + '/sync',
+        url: '/api/repository/' + id + '/sync',
         type: 'json'
     }).then(this.completed, this.failed);
 });

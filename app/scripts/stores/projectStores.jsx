@@ -12,7 +12,7 @@ Stores.List = Reflux.createStore({
 
     list() {
         reqwest({
-            url: '/api/project',
+            url: '/api/repository',
             type: 'json'
         }).then(this.onSuccess, this.onError);
     },
@@ -50,7 +50,7 @@ Stores.Get = Reflux.createStore({
 
     get(id) {
         reqwest({
-            url: '/api/project/' + id,
+            url: '/api/repository/' + id,
             type: 'json'
         }).then(this.onSuccess, this.onError);
     },
@@ -87,7 +87,7 @@ Stores.Files = Reflux.createStore({
 
     get(id) {
         reqwest({
-            url: '/api/project/' + id + '/files',
+            url: '/api/repository/' + id + '/files',
             type: 'json'
         }).then(this.onSuccess, this.onError);
     },

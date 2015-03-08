@@ -12,7 +12,7 @@ Stores.List = Reflux.createStore({
 
     list() {
         reqwest({
-            url: '/api/job',
+            url: '/api/task',
             type: 'json'
         }).then(this.onSuccess, this.onError);
     },
@@ -50,7 +50,7 @@ Stores.Get = Reflux.createStore({
 
     get(id) {
         reqwest({
-            url: '/api/job/' + id,
+            url: '/api/task/' + id,
             type: 'json'
         }).then(this.onSuccess, this.onError);
     },
