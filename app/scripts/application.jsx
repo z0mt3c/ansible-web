@@ -6,10 +6,12 @@ var React = require('react'),
     _ = require('lodash');
 
 var pageItems = [
-    {text: 'Default', to: 'default'},
-    {text: 'Demo', to: 'demo'},
-    {text: 'Tasks', to: 'task_list'},
-    {text: 'Repositories', to: 'repository_list'}
+    {text: 'Dashboard', to: 'dashboard'},
+    {text: 'Users', to: 'user_list'},
+    {text: 'Credentials', to: 'credential_list'},
+    {text: 'Inventories', to: 'inventory_list'},
+    {text: 'Repositories', to: 'repository_list'},
+    {text: 'Tasks', to: 'task_list'}
 ];
 
 var Layout = module.exports = React.createClass({
