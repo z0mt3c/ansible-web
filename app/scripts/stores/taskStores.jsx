@@ -1,13 +1,13 @@
 var Reflux = require('reflux');
 var reqwest = require('reqwest');
 var _ = require('lodash');
-var actions = require('../actions/taskActions');
+var Actions = require('../actions/taskActions');
 
 var Stores = module.exports = {};
 
 Stores.List = Reflux.createStore({
     init() {
-        this.listenTo(actions.list, this.list);
+        this.listenTo(Actions.list, this.list);
     },
 
     list() {
@@ -19,12 +19,12 @@ Stores.List = Reflux.createStore({
 
     onSuccess: function(items) {
         this.update(items);
-        actions.list.completed(items);
+        Actions.list.completed(items);
     },
 
     onError: function(error) {
         this.update([]);
-        actions.list.failed(error);
+        Actions.list.failed(error);
     },
 
     update(list) {
@@ -45,7 +45,7 @@ Stores.List = Reflux.createStore({
 
 Stores.Get = Reflux.createStore({
     init() {
-        this.listenTo(actions.get, this.get);
+        this.listenTo(Actions.get, this.get);
     },
 
     get(id) {
@@ -57,12 +57,12 @@ Stores.Get = Reflux.createStore({
 
     onSuccess: function(item) {
         this.update(item);
-        actions.get.completed(item);
+        Actions.get.completed(item);
     },
 
     onError: function(error) {
         this.update({});
-        actions.get.failed(error);
+        Actions.get.failed(error);
     },
 
     update(item) {

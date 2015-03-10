@@ -16,8 +16,8 @@ var TaskApp = require('./apps/task');
 
 var routes = module.exports = (
     <Route name="root" handler={App} path="/" ignoreScrollBehavior>
-        <DefaultRoute handler={DashboardApp} />
-        <Route name="dashboard" handler={DashboardApp} path="/" />
+        <DefaultRoute handler={DashboardApp.List} />
+        <Route name="dashboard" handler={DashboardApp.List} path="/" />
 
         <Route name="task_list" path="/tasks">
             <DefaultRoute handler={TaskApp.List} />

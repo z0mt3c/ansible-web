@@ -7,8 +7,8 @@ module.exports = React.createClass({
     render: function() {
         return (
             <div className="page-main">
-                <h2>Dashboard</h2>
-                <p>Insert dashboard here</p>
+                <h2>Credentials</h2>
+                <p>Manage your host and repository credentials</p>
             </div>
         );
     }

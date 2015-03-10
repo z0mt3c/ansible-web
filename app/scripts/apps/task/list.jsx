@@ -67,6 +67,8 @@ module.exports = React.createClass({
                     Tasks
                 </h2>
 
+                <p>Manage your playbook execution tasks</p>
+
                 <JobList items={this.state.list} />
             </div>
         );

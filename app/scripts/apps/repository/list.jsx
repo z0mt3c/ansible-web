@@ -72,6 +72,8 @@ module.exports = React.createClass({
                     Repositories
                 </h2>
 
+                <p>Manage your playbook repositories</p>
+
                 <ProjectList items={this.state.list} />
             </div>
         );

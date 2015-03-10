@@ -8,7 +8,7 @@ module.exports = React.createClass({
         return (
             <div className="page-main">
                 <h2>Users</h2>
-                <p>Insert user list here</p>
+                <p>Manage the users for this tool</p>
             </div>
         );
     }

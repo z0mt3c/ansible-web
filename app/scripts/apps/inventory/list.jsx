@@ -8,7 +8,7 @@ module.exports = React.createClass({
         return (
             <div className="page-main">
                 <h2>Inventories</h2>
-                <p>Different host inventories should be managed on this page</p>
+                <p>Manage multiple host inventories</p>
             </div>
         );
     }
