@@ -1,6 +1,6 @@
 var React = require('react/addons'),
     Router = require('react-router'),
-    { Button, Table } = require('react-bootstrap'),
+    { Button, Table, PageHeader } = require('react-bootstrap'),
     _ = require('lodash'),
     $ = require('jquery');
 
@@ -38,18 +38,18 @@ var ProjectList = React.createClass({
         return (
             <Table hover>
                 <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Type</th>
-                        <th>Description</th>
-                        <th>Url</th>
-                        <th>Branch</th>
-                        <th>Actions</th>
-                    </tr>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>Url</th>
+                    <th>Branch</th>
+                    <th>Actions</th>
+                </tr>
                 </thead>
                 <tbody>
-                    {items}
+                {items}
                 </tbody>
             </Table>
         );
@@ -67,14 +67,12 @@ module.exports = React.createClass({
     render: function() {
         return (
             <div className="page-main">
-                <h2>
-                    <Button bsStyle="primary" onClick={this.createProject} className="pull-right">Create new repository</Button>
-                    Repositories
-                </h2>
+                <PageHeader>Repositories
+                    <small> Manage your playbook repositories</small>
+                    <Button bsStyle="primary" onClick={this.createProject} className="pull-right">Create new  repository</Button>
+                </PageHeader>
 
-                <p>Manage your playbook repositories</p>
-
-                <ProjectList items={this.state.list} />
+                <ProjectList items={this.state.list}/>
             </div>
         );
     }

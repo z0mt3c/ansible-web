@@ -30,7 +30,7 @@ var Layout = module.exports = React.createClass({
 
         return (
             <div className="page">
-                <Bootstrap.Navbar brand="Demo">
+                <Bootstrap.Navbar brand="Ansible Master">
                     <Bootstrap.Nav>
                         {items}
                     </Bootstrap.Nav>

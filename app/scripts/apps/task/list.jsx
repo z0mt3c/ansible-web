@@ -1,6 +1,6 @@
 var React = require('react/addons'),
     Router = require('react-router'),
-    { Button, Table } = require('react-bootstrap'),
+    { Button, Table, PageHeader } = require('react-bootstrap'),
     _ = require('lodash'),
     $ = require('jquery');
 
@@ -35,16 +35,16 @@ var JobList = React.createClass({
         return (
             <Table hover>
                 <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Type</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Actions</th>
-                    </tr>
+                <tr>
+                    <th>ID</th>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
                 </thead>
                 <tbody>
-                    {items}
+                {items}
                 </tbody>
             </Table>
         );
@@ -62,14 +62,12 @@ module.exports = React.createClass({
     render: function() {
         return (
             <div className="page-main">
-                <h2>
-                <Button bsStyle="primary" onClick={this.createJob} className="pull-right">Create new task</Button>
-                    Tasks
-                </h2>
+                <PageHeader>Tasks
+                    <small> Manage your playbook execution tasks</small>
+                    <Button bsStyle="primary" onClick={this.createJob} className="pull-right">Create new task</Button>
+                </PageHeader>
 
-                <p>Manage your playbook execution tasks</p>
-
-                <JobList items={this.state.list} />
+                <JobList items={this.state.list}/>
             </div>
         );
     }

@@ -1,14 +1,12 @@
 var React = require('react');
-var Link = require('react-router').Link;
+var Link = require('react-router').Link,
+    { PageHeader } = require('react-bootstrap');
 
 var NotFound = React.createClass({
     render: function() {
         return (
             <div className="content full-width">
-                <h1>{ 'That Page Doesn\'t Exist' }</h1>
-                <p>
-                    <Link to="default">Return to default</Link>
-                </p>
+                <PageHeader>404 <small>{ 'That Page Doesn\'t Exist' }</small></PageHeader>
             </div>
         );
     }

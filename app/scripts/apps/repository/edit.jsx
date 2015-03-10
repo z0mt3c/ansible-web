@@ -1,6 +1,6 @@
 var React = require('react/addons'),
     Router = require('react-router'),
-    { Alert, Input } = require('react-bootstrap'),
+    { Alert, Input, PageHeader } = require('react-bootstrap'),
     _ = require('lodash'),
     $ = require('jquery');
 
@@ -60,9 +60,9 @@ module.exports = React.createClass({
 
         return (
             <div className="page-main">
-                <h2>
-                    {params.id ? 'Edit repository' : 'Create repository'}
-                </h2>
+                <PageHeader> {params.id ? 'Edit repository' : 'Create repository'}
+                    <small></small>
+                </PageHeader>
 
                 {error}
 

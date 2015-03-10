@@ -1,5 +1,6 @@
 var React = require('react'),
     Router = require('react-router'),
+    { PageHeader } = require('react-bootstrap'),
     Link = Router.Link;
 
 module.exports = React.createClass({
@@ -7,8 +8,7 @@ module.exports = React.createClass({
     render: function() {
         return (
             <div className="page-main">
-                <h2>Dashboard</h2>
-                <p>Insert fancy dashboard here</p>
+                <PageHeader>Dashboard <small>Insert fancy dashboard here</small></PageHeader>
             </div>
         );
     }
