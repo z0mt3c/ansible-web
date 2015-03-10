@@ -5,8 +5,8 @@ var React = require('react/addons'),
     $ = require('jquery');
 
 var Reflux = require('reflux');
-var ProjectActions = require('../../actions/projectActions');
-var ProjectStores = require('../../stores/projectStores');
+var Actions = require('../../actions/repositoryActions');
+var Stores = require('../../stores/repositoryStores');
 
 var ProjectList = React.createClass({
     mixins: [Router.Navigation],
@@ -15,12 +15,12 @@ var ProjectList = React.createClass({
     },
     edit: function(obj, e) {
         e.preventDefault();
-        this.transitionTo('project_edit', {id: obj.id});
+        this.transitionTo('repository_edit', {id: obj.id});
     },
     sync: function(obj, e) {
         e.preventDefault();
         e.stopPropagation();
-        ProjectActions.sync(obj.id);
+        Actions.sync(obj.id);
     },
     render: function() {
         var items = _.map(this.props.items, function(item) {
@@ -57,19 +57,19 @@ var ProjectList = React.createClass({
 });
 
 module.exports = React.createClass({
-    mixins: [Router.Navigation, Reflux.connect(ProjectStores.List, 'list')],
+    mixins: [Router.Navigation, Reflux.connect(Stores.List, 'list')],
     componentDidMount: function() {
-        ProjectActions.list();
+        Actions.list();
     },
     createProject: function() {
-        this.transitionTo('project_create');
+        this.transitionTo('repository_create');
     },
     render: function() {
         return (
             <div className="page-main">
                 <h2>
-                    <Button bsStyle="primary" onClick={this.createProject} className="pull-right">Create new project</Button>
-                    Projects
+                    <Button bsStyle="primary" onClick={this.createProject} className="pull-right">Create new repository</Button>
+                    Repositories
                 </h2>
 
                 <ProjectList items={this.state.list} />

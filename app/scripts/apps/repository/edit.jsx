@@ -5,25 +5,25 @@ var React = require('react/addons'),
     $ = require('jquery');
 
 var Reflux = require('reflux');
-var ProjectActions = require('../../actions/projectActions');
-var ProjectStores = require('../../stores/projectStores');
+var Actions = require('../../actions/repositoryActions');
+var Stores = require('../../stores/repositoryStores');
 
 module.exports = React.createClass({
-    mixins: [Router.Navigation, Router.State, Reflux.connect(ProjectStores.Get), React.addons.LinkedStateMixin, Reflux.ListenerMixin],
+    mixins: [Router.Navigation, Router.State, Reflux.connect(Stores.Get), React.addons.LinkedStateMixin, Reflux.ListenerMixin],
     componentDidMount: function() {
         var params = this.getParams();
 
         if (params.id) {
-            ProjectActions.get(params.id);
+            Actions.get(params.id);
         }
 
-        this.listenTo(ProjectActions.update.completed, this.completed);
-        this.listenTo(ProjectActions.create.completed, this.completed);
-        this.listenTo(ProjectActions.update.failed, this.failed);
-        this.listenTo(ProjectActions.create.failed, this.failed);
+        this.listenTo(Actions.update.completed, this.completed);
+        this.listenTo(Actions.create.completed, this.completed);
+        this.listenTo(Actions.update.failed, this.failed);
+        this.listenTo(Actions.create.failed, this.failed);
     },
     completed: function() {
-        this.transitionTo('project_list');
+        this.transitionTo('repository_list');
     },
     failed: function(xhr) {
         var error = JSON.parse(xhr.response);
@@ -36,9 +36,9 @@ module.exports = React.createClass({
         var params = this.getParams();
 
         if (params.id) {
-            ProjectActions.update(this.state);
+            Actions.update(this.state);
         } else {
-            ProjectActions.create(this.state);
+            Actions.create(this.state);
         }
     },
     render: function() {
@@ -61,7 +61,7 @@ module.exports = React.createClass({
         return (
             <div className="page-main">
                 <h2>
-                    {params.id ? 'Edit project' : 'Create project'}
+                    {params.id ? 'Edit repository' : 'Create repository'}
                 </h2>
 
                 {error}

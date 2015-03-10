@@ -5,38 +5,38 @@ var React = require('react/addons'),
     $ = require('jquery');
 
 var Reflux = require('reflux');
-var JobActions = require('../../actions/jobActions');
-var JobStores = require('../../stores/jobStores');
-var ProjectActions = require('../../actions/projectActions');
-var ProjectStores = require('../../stores/projectStores');
+var Actions = require('../../actions/taskActions');
+var Stores = require('../../stores/taskStores');
+var RepositoryActions = require('../../actions/repositoryActions');
+var RepositoryStores = require('../../stores/repositoryStores');
 
 var SelectProject = React.createClass({
-    mixins: [Reflux.connect(ProjectStores.List, 'projects')],
+    mixins: [Reflux.connect(RepositoryStores.List, 'repositorys')],
     componentDidMount() {
-        ProjectActions.list();
+        RepositoryActions.list();
     },
     render() {
-        var options = [{id: '', name: 'Nothing'}].concat(this.state.projects);
+        var options = [{id: '', name: 'Nothing'}].concat(this.state.repositorys);
 
         return React.createElement(Input, React.__spread({}, this.props, {
                 type: 'select',
                 ref: 'input',
                 key: 'input'
             }),
-            _.map(options, function(project) {
-                return (<option value={project.id} key={project.id}>{project.name}</option>);
+            _.map(options, function(repository) {
+                return (<option value={repository.id} key={repository.id}>{repository.name}</option>);
             })
         );
     }
 });
 
 var SelectPlaybook = React.createClass({
-    mixins: [Reflux.connect(ProjectStores.Files, 'files'), Reflux.connect(JobStores.Get, 'project')],
+    mixins: [Reflux.connect(RepositoryStores.Files, 'files'), Reflux.connect(Stores.Get, 'repository')],
     propTypes: {
-        project: React.PropTypes.string
+        repository: React.PropTypes.string
     },
     componentDidMount() {
-        ProjectActions.files(this.props.project);
+        RepositoryActions.files(this.props.repository);
     },
     render() {
         var options = [].concat(this.state.files);
@@ -52,24 +52,24 @@ var SelectPlaybook = React.createClass({
         );
     },
     componentWillReceiveProps: function(nextProps) {
-        ProjectActions.files(nextProps.project);
+        RepositoryActions.files(nextProps.repository);
     }
 });
 
 
 var JobForm = React.createClass({
-    mixins: [Router.State, Reflux.connect(JobStores.Get), React.addons.LinkedStateMixin, Reflux.ListenerMixin],
+    mixins: [Router.State, Reflux.connect(Stores.Get), React.addons.LinkedStateMixin, Reflux.ListenerMixin],
     componentDidMount() {
         var params = this.getParams();
 
         if (params.id) {
-            JobActions.get(params.id);
+            Actions.get(params.id);
         }
 
-        this.listenTo(JobActions.update.completed, this.completed);
-        this.listenTo(JobActions.create.completed, this.completed);
-        this.listenTo(JobActions.update.failed, this.failed);
-        this.listenTo(JobActions.create.failed, this.failed);
+        this.listenTo(Actions.update.completed, this.completed);
+        this.listenTo(Actions.create.completed, this.completed);
+        this.listenTo(Actions.update.failed, this.failed);
+        this.listenTo(Actions.create.failed, this.failed);
     },
     completed() {
         this.props.onSave();
@@ -85,9 +85,9 @@ var JobForm = React.createClass({
         var params = this.getParams();
 
         if (params.id) {
-            JobActions.update(this.state);
+            Actions.update(this.state);
         } else {
-            JobActions.create(this.state);
+            Actions.create(this.state);
         }
     },
     render() {
@@ -106,17 +106,23 @@ var JobForm = React.createClass({
             }, bsStyle)
         }
 
-        var project = this.state.project;
+        var repository = this.state.repository;
         return (
             <form className="form-horizontal" onSubmit={this.submit}>
                 {error}
 
-                <Input type="text" label="Name" labelClassName="col-xs-2" wrapperClassName="col-xs-10" valueLink={this.linkState('name')} bsStyle={bsStyle.name}/>
-                <Input type="textarea" label="Description" labelClassName="col-xs-2" wrapperClassName="col-xs-10" valueLink={this.linkState('description')} bsStyle={bsStyle.description}/>
-                <SelectProject label="Project" labelClassName="col-xs-2" wrapperClassName="col-xs-10" valueLink={this.linkState('project')} bsStyle={bsStyle.project}/>
-                <SelectPlaybook label="Playbook" labelClassName="col-xs-2" wrapperClassName="col-xs-10" ref="selectPlaybook" project={project} valueLink={this.linkState('playbook')} bsStyle={bsStyle.playbook}/>
+                <Input type="text" label="Name" labelClassName="col-xs-2" wrapperClassName="col-xs-10"
+                       valueLink={this.linkState('name')} bsStyle={bsStyle.name}/>
+                <Input type="textarea" label="Description" labelClassName="col-xs-2" wrapperClassName="col-xs-10"
+                       valueLink={this.linkState('description')} bsStyle={bsStyle.description}/>
+                <SelectProject label="Project" labelClassName="col-xs-2" wrapperClassName="col-xs-10"
+                               valueLink={this.linkState('repository')} bsStyle={bsStyle.repository}/>
+                <SelectPlaybook label="Playbook" labelClassName="col-xs-2" wrapperClassName="col-xs-10"
+                                ref="selectPlaybook" repository={repository} valueLink={this.linkState('playbook')}
+                                bsStyle={bsStyle.playbook}/>
 
-                <Input type="select" label="Verbosity" labelClassName="col-xs-2" wrapperClassName="col-xs-10" valueLink={this.linkState('verbosity')} bsStyle={bsStyle.verbosity}>
+                <Input type="select" label="Verbosity" labelClassName="col-xs-2" wrapperClassName="col-xs-10"
+                       valueLink={this.linkState('verbosity')} bsStyle={bsStyle.verbosity}>
                     <option value="default">Default</option>
                     <option value="verbose">Verbose</option>
                     <option value="debug">Debug</option>
@@ -133,7 +139,7 @@ module.exports = React.createClass({
     componentDidMount() {
     },
     save() {
-        this.transitionTo('job_list');
+        this.transitionTo('task_list');
     },
     render() {
         var params = this.getParams();
@@ -141,10 +147,10 @@ module.exports = React.createClass({
         return (
             <div className="page-main">
                 <h2>
-                    {params.id ? 'Edit job' : 'Create job'}
+                    {params.id ? 'Edit task' : 'Create task'}
                 </h2>
 
-                <JobForm id={params.id} onSave={this.save} />
+                <JobForm id={params.id} onSave={this.save}/>
             </div>
         );
     }

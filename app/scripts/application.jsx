@@ -8,8 +8,8 @@ var React = require('react'),
 var pageItems = [
     {text: 'Default', to: 'default'},
     {text: 'Demo', to: 'demo'},
-    {text: 'Jobs', to: 'job_list'},
-    {text: 'Projects', to: 'project_list'}
+    {text: 'Tasks', to: 'task_list'},
+    {text: 'Repositories', to: 'repository_list'}
 ];
 
 var Layout = module.exports = React.createClass({

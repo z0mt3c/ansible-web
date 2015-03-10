@@ -5,8 +5,8 @@ var React = require('react/addons'),
     $ = require('jquery');
 
 var Reflux = require('reflux');
-var JobActions = require('../../actions/jobActions');
-var JobStores = require('../../stores/jobStores');
+var Actions = require('../../actions/taskActions');
+var Stores = require('../../stores/taskStores');
 
 var JobList = React.createClass({
     mixins: [Router.Navigation],
@@ -16,10 +16,10 @@ var JobList = React.createClass({
     run: function(item, e) {
         e.preventDefault();
         e.stopPropagation();
-        JobActions.run(item.id);
+        Actions.run(item.id);
     },
     editJob: function(obj) {
-        this.transitionTo('job_edit', {id: obj.id});
+        this.transitionTo('task_edit', {id: obj.id});
     },
     render: function() {
         var items = _.map(this.props.items, function(item) {
@@ -52,19 +52,19 @@ var JobList = React.createClass({
 });
 
 module.exports = React.createClass({
-    mixins: [Router.Navigation, Reflux.connect(JobStores.List, 'list')],
+    mixins: [Router.Navigation, Reflux.connect(Stores.List, 'list')],
     componentDidMount: function() {
-        JobActions.list();
+        Actions.list();
     },
     createJob: function() {
-        this.transitionTo('job_create');
+        this.transitionTo('task_create');
     },
     render: function() {
         return (
             <div className="page-main">
                 <h2>
-                <Button bsStyle="primary" onClick={this.createJob} className="pull-right">Create new job</Button>
-                    Jobs
+                <Button bsStyle="primary" onClick={this.createJob} className="pull-right">Create new task</Button>
+                    Tasks
                 </h2>
 
                 <JobList items={this.state.list} />

@@ -1,7 +1,7 @@
 var Reflux = require('reflux');
 var reqwest = require('reqwest');
 var _ = require('lodash');
-var actions = require('../actions/jobActions');
+var actions = require('../actions/taskActions');
 
 var Stores = module.exports = {};
 
