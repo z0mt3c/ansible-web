@@ -2,6 +2,12 @@
 @import "../../node_modules/bootstrap/less/bootstrap.less";
 @import "./variables.less";
 
+.run-detail {
+  nav {
+    margin-bottom: @padding-large-vertical;
+  }
+}
+
 pre.ansi {
   clear: left;
   min-height: 42px;
@@ -16,6 +22,7 @@ pre.ansi {
   background-color: @gray-dark;
   counter-reset: line-numbering;
   margin-top: 0;
+  border: 1px solid @gray-darker;
 
   > p {
     position: relative;
@@ -25,6 +32,17 @@ pre.ansi {
 
     &.stderr {
       color: @brand-warning;
+    }
+
+    &.stdout {
+      &.play,
+      &.gathering,
+      &.task { font-weight: bold; }
+
+      &.host-ok { color: @brand-success; }
+      &.host-changed { color: @brand-warning; }
+      &.host-skipping { color: @brand-info; }
+      &.host-fatal { color: @brand-danger; }
     }
 
     &.exit {
