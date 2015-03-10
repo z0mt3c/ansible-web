@@ -10,13 +10,13 @@ var Stores = require('../../stores/taskStores');
 var RepositoryActions = require('../../actions/repositoryActions');
 var RepositoryStores = require('../../stores/repositoryStores');
 
-var SelectProject = React.createClass({
-    mixins: [Reflux.connect(RepositoryStores.List, 'repositorys')],
+var SelectRepository = React.createClass({
+    mixins: [Reflux.connect(RepositoryStores.List, 'repositories')],
     componentDidMount() {
         RepositoryActions.list();
     },
     render() {
-        var options = [{id: '', name: 'Nothing'}].concat(this.state.repositorys);
+        var options = [{id: '', name: 'Nothing'}].concat(this.state.repositories);
 
         return React.createElement(Input, React.__spread({}, this.props, {
                 type: 'select',
@@ -106,7 +106,7 @@ var JobForm = React.createClass({
             }, bsStyle)
         }
 
-        var repository = this.state.repository;
+        var repositoryId = this.state.repositoryId;
         return (
             <form className="form-horizontal" onSubmit={this.submit}>
                 {error}
@@ -115,10 +115,10 @@ var JobForm = React.createClass({
                        valueLink={this.linkState('name')} bsStyle={bsStyle.name}/>
                 <Input type="textarea" label="Description" labelClassName="col-xs-2" wrapperClassName="col-xs-10"
                        valueLink={this.linkState('description')} bsStyle={bsStyle.description}/>
-                <SelectProject label="Project" labelClassName="col-xs-2" wrapperClassName="col-xs-10"
-                               valueLink={this.linkState('repository')} bsStyle={bsStyle.repository}/>
+                <SelectRepository label="Project" labelClassName="col-xs-2" wrapperClassName="col-xs-10"
+                               valueLink={this.linkState('repositoryId')} bsStyle={bsStyle.repositoryId}/>
                 <SelectPlaybook label="Playbook" labelClassName="col-xs-2" wrapperClassName="col-xs-10"
-                                ref="selectPlaybook" repository={repository} valueLink={this.linkState('playbook')}
+                                ref="selectPlaybook" repository={repositoryId} valueLink={this.linkState('playbook')}
                                 bsStyle={bsStyle.playbook}/>
 
                 <Input type="select" label="Verbosity" labelClassName="col-xs-2" wrapperClassName="col-xs-10"

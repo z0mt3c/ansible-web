@@ -11,6 +11,7 @@ var DashboardApp = require('./apps/dashboard');
 var Generic = require('./apps/generic');
 var RepositoryApp = require('./apps/repository');
 var UserApp = require('./apps/user');
+var RunApp = require('./apps/run');
 var InventoryApp = require('./apps/inventory');
 var TaskApp = require('./apps/task');
 
@@ -23,6 +24,11 @@ var routes = module.exports = (
             <DefaultRoute handler={TaskApp.List} />
             <Route name="task_create" handler={TaskApp.Edit} path="new" />
             <Route name="task_edit" handler={TaskApp.Edit} path=":id" />
+        </Route>
+
+        <Route name="run_list" path="/runs">
+            <DefaultRoute handler={RunApp.List} />
+            <Route name="run_detail" handler={RunApp.Detail} path=":id" />
         </Route>
 
         <Route name="repository_list" path="/repositorys">

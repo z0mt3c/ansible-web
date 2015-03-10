@@ -1,4 +1,61 @@
 @import url(http://fonts.googleapis.com/css?family=Roboto:400,300,500);
-
 @import "../../node_modules/bootstrap/less/bootstrap.less";
 @import "./variables.less";
+
+pre.ansi {
+  clear: left;
+  min-height: 42px;
+  padding: 15px 0;
+  color: @gray-lighter;
+  font-size: 12px;
+  line-height: 18px;
+  //font-family: monospace;
+  //line-height: 19px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  background-color: @gray-dark;
+  counter-reset: line-numbering;
+  margin-top: 0;
+
+  > p {
+    position: relative;
+    padding: 0 15px 0 55px;
+    margin: 0;
+    min-height: 16px;
+
+    &.stderr {
+      color: @brand-warning;
+    }
+
+    &.exit {
+      > span {
+        color: @brand-danger;
+      }
+
+      &[data-code="0"] {
+        > span {
+          color: @brand-success;
+        }
+      }
+    }
+
+    &:hover {
+      background-color: lighten(@gray-dark, 5%);
+    }
+
+    > a {
+      &:before {
+        content: counter(line-numbering);
+        counter-increment: line-numbering;
+        padding-right: 1em;
+      }
+      display: inline-block;
+      text-align: right;
+      min-width: 40px;
+      margin-left: -33px;
+      cursor: pointer;
+      text-decoration: none;
+      color: @gray-light;
+    }
+  }
+}

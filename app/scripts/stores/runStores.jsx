@@ -1,7 +1,7 @@
 var Reflux = require('reflux');
 var reqwest = require('reqwest');
 var _ = require('lodash');
-var Actions = require('../actions/repositoryActions');
+var Actions = require('../actions/runActions');
 
 var Stores = module.exports = {};
 
@@ -12,7 +12,7 @@ Stores.List = Reflux.createStore({
 
     list() {
         reqwest({
-            url: '/api/repository',
+            url: '/api/run',
             type: 'json'
         }).then(this.onSuccess, this.onError);
     },
@@ -50,7 +50,7 @@ Stores.Get = Reflux.createStore({
 
     get(id) {
         reqwest({
-            url: '/api/repository/' + id,
+            url: '/api/run/' + id,
             type: 'json'
         }).then(this.onSuccess, this.onError);
     },
@@ -72,48 +72,6 @@ Stores.Get = Reflux.createStore({
 
     getInitialState() {
         this.item = {};
-        return this.item;
-    },
-
-    getDefaultData() {
-        return this.item;
-    }
-});
-
-Stores.Files = Reflux.createStore({
-    init() {
-        this.listenTo(Actions.files, this.get);
-        this.listenTo(Actions.filesClear, this.clear);
-    },
-
-    get(id) {
-        reqwest({
-            url: '/api/repository/' + id + '/files',
-            type: 'json'
-        }).then(this.onSuccess, this.onError);
-    },
-
-    onSuccess: function(item) {
-        this.update(item);
-        Actions.get.completed(item);
-    },
-
-    onError: function(error) {
-        this.update([]);
-        Actions.get.failed(error);
-    },
-
-    clear() {
-        this.update([]);
-    },
-
-    update(item) {
-        this.item = item;
-        this.trigger(item);
-    },
-
-    getInitialState() {
-        this.item = [];
         return this.item;
     },
 

@@ -5,6 +5,7 @@ var Actions = Reflux.createActions(
     {
         'list': {asyncResult: true},
         'files': {asyncResult: true},
+        'filesClear': {},
         'sync': {asyncResult: true},
         'get': {asyncResult: true},
         'create': {asyncResult: true},
@@ -48,7 +49,13 @@ Actions.sync.listen(function(id) {
 });
 
 Actions.files.shouldEmit = function(id) {
-    return !!id;
+    var shouldEmit = !!id;
+
+    if (!shouldEmit) {
+        Actions.filesClear();
+    }
+
+    return shouldEmit;
 };
 
 Actions.sync.shouldEmit = function(id) {
