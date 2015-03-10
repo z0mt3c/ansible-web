@@ -27,7 +27,7 @@ module.exports = React.createClass({
             return memo;
         }, []);
 
-        var exit = this.state.exitCode ? <p className="exit" data-code={this.state.exitCode}><a/><span>Done. Process exited with {this.state.exitCode}.</span></p> : null;
+        var exit = this.state.exitCode ? <p className="exit" data-code={this.state.exitCode}><a/><span>Done. Process exited with exit code {this.state.exitCode}.</span></p> : null;
 
         return (
             <div className="page-main">
