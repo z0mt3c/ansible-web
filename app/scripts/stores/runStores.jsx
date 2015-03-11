@@ -42,6 +42,9 @@ Stores.List = Reflux.createStore({
     }
 });
 
+var io = require('socket.io-client');
+var socket = io();
+
 
 Stores.Get = Reflux.createStore({
     init() {
@@ -49,10 +52,32 @@ Stores.Get = Reflux.createStore({
     },
 
     get(id) {
+        socket.emit('task:listen', id);
+        socket.on('task:update', this.onUpdate);
+
         reqwest({
             url: '/api/run/' + id,
             type: 'json'
         }).then(this.onSuccess, this.onError);
+    },
+
+    onUpdate: function(data) {
+        var item = this.item;
+        var update = data ? data.update : null;
+
+        if (item && item.id === data.id && (update.$push || update.$set)) {
+            item = _.reduce(update.$push, function(memo, value, key) {
+                var target = memo[key] = _.isArray(memo[key]) ? memo[key] : [];
+                if (!_.contains(target, value))  {
+                    target.push(value);
+                }
+                return memo;
+            }, item);
+
+            item = _.extend(item, update.$set);
+
+            this.update(item);
+        }
     },
 
     onSuccess: function(item) {

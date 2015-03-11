@@ -1,6 +1,6 @@
 var React = require('react/addons'),
     Router = require('react-router'),
-    { TabbedArea, TabPane, Table, Alert, Input, PageHeader, Panel } = require('react-bootstrap'),
+    { TabbedArea, TabPane, Table, Alert, Input, PageHeader, Panel, ListGroup, ListGroupItem, Label } = require('react-bootstrap'),
     _ = require('lodash'),
     $ = require('jquery');
 
@@ -8,50 +8,56 @@ var Reflux = require('reflux');
 var Actions = require('../../actions/runActions');
 var Stores = require('../../stores/runStores');
 
-var SetIntervalMixin = {
-    setInterval: function() {
-        this.clearInterval();
-        this.interval = (setInterval.apply(null, arguments));
-    },
-    clearInterval: function() {
-        if (this.interval) {
-            clearInterval(this.interval)
-            this.interval = null;
-        }
-    },
-    componentWillUnmount: function() {
-        this.clearInterval();
+var badgeForTask = function(task) {
+    switch (task) {
+        case 'runner_on_failed':
+            return <Label bsStyle="danger">FAILED</Label>;
+        case 'runner_on_ok':
+            return <Label bsStyle="success">OK</Label>;
+        case 'runner_on_error':
+            return <Label bsStyle="danger">ERROR</Label>;
+        case 'runner_on_skipped':
+            return <Label bsStyle="warning">SKIPPED</Label>;
+        case 'runner_on_unreachable':
+            return <Label bsStyle="danger">UNREACHABLE</Label>;
+        default:
+            return <Label bsStyle="default">{task}</Label>;
     }
 };
-
 
 var PlaybookTask = React.createClass({
     render: function() {
         var item = this.props.item;
-        var title = (<h3>Task: {item.name}</h3>);
-        var results = _.map(item.results, function(result, i) {
-            return (<div key={i}>{result.host} {'->'} {result.task}</div>);
-        });
+        var title = 'Task: ' + item.name;
 
-        return (<Panel header={title}>{results}</Panel>);
+        return (<ListGroupItem header={title}>{_.map(item.results, function(result, i) {
+            var status = badgeForTask(result.task);
+            return (<span key={i} className="host-result">
+                {result.host} {status}
+            </span>);
+        })}</ListGroupItem>);
     }
 });
 
 var PlaybookGathering = React.createClass({
     render: function() {
         var item = this.props.item;
-        var title = (<h3>Gathering facts</h3>);
+        var title = 'Gathering facts';
+
         var results = _.map(item.results, function(result, i) {
-            return (<div key={i}>{result.host} {'->'} {result.task}</div>);
+            var status = badgeForTask(result.task);
+            return (<div key={i} className="host-result">
+                {result.host} {status}
+            </div>);
         });
 
-        return (<Panel header={title}>{results}</Panel>);
+        return (<ListGroupItem header={title}>{results}</ListGroupItem>);
     }
 });
 var PlaybookStats = React.createClass({
     render: function() {
         var item = this.props.item;
-        var title = (<h3>Play recap</h3>);
+        var title = 'Play recap';
         var results = _.map(item.stats, function(result, i) {
             return (<tr key={i}>
                 <td>{result.host}</td>
@@ -62,7 +68,7 @@ var PlaybookStats = React.createClass({
             </tr>);
         });
 
-        return (<Panel header={title}>
+        return (<ListGroupItem header={title}>
             <Table responsive condensed striped>
                 <thead>
                 <tr>
@@ -77,19 +83,14 @@ var PlaybookStats = React.createClass({
                 {results}
                 </tbody>
             </Table>
-        </Panel>);
+        </ListGroupItem>);
     }
 });
 
 module.exports = React.createClass({
-    mixins: [Router.Navigation, Router.State, Reflux.connect(Stores.Get), Reflux.ListenerMixin, SetIntervalMixin],
+    mixins: [Router.Navigation, Router.State, Reflux.connect(Stores.Get), Reflux.ListenerMixin],
     componentDidMount: function() {
         this.load();
-    },
-    startRefreshing: function() {
-        if (!this.interval) {
-            this.setInterval(this.load, 1000);
-        }
     },
     load: function() {
         var params = this.getParams();
@@ -106,7 +107,6 @@ module.exports = React.createClass({
                 }
 
                 var lineClass = '';
-
                 if (lineData.indexOf('PLAY ') === 0) {
                     lineClass = 'play';
                 } else if (lineData.indexOf('GATHERING FACTS') === 0) {
@@ -135,12 +135,6 @@ module.exports = React.createClass({
         var exit = processExited ? <p className="exit" data-code={this.state.exitCode}><a/><span>Done. Process exited with exit code {this.state.exitCode}.</span>
         </p> : null;
 
-        if (!processExited) {
-            this.startRefreshing();
-        } else {
-            this.clearInterval();
-        }
-
         return (
             <div className="page-main run-detail">
                 <PageHeader> Run
@@ -165,11 +159,15 @@ module.exports = React.createClass({
         var result = _.reduce(this.state.messages, function(memo, message) {
             var previous = _.last(memo);
 
-            if (previous && _.contains(['runner_on_ok', 'runner_on_skipped'], message.task)) {
+            if (previous && _.contains(['runner_on_failed',
+                    'runner_on_ok',
+                    'runner_on_error',
+                    'runner_on_skipped',
+                    'runner_on_unreachable'], message.task)) {
                 var results = previous.results = previous.results || [];
                 results.push(message);
             } else {
-                memo.push(message);
+                memo.push(_.clone(message));
             }
 
             return memo;
@@ -188,6 +186,6 @@ module.exports = React.createClass({
             }
         });
 
-        return (<div>{list}</div>)
+        return (<ListGroup>{list}</ListGroup>)
     }
 });

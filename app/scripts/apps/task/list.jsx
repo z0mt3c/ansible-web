@@ -16,7 +16,9 @@ var JobList = React.createClass({
     run: function(item, e) {
         e.preventDefault();
         e.stopPropagation();
-        Actions.run(item.id);
+        Actions.run.triggerPromise(item.id).then(function(data) {
+            this.transitionTo('run_detail', {id: data.runId});
+        }.bind(this));
     },
     editJob: function(obj) {
         this.transitionTo('task_edit', {id: obj.id});

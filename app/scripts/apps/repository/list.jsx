@@ -13,16 +13,18 @@ var ProjectList = React.createClass({
     propTypes: {
         items: React.PropTypes.array
     },
-    edit: function(obj, e) {
+    edit(obj, e) {
         e.preventDefault();
         this.transitionTo('repository_edit', {id: obj.id});
     },
-    sync: function(obj, e) {
+    sync(obj, e) {
         e.preventDefault();
         e.stopPropagation();
-        Actions.sync(obj.id);
+        Actions.sync.triggerPromise(obj.id).then(function(data) {
+            this.transitionTo('run_detail', {id: data.runId});
+        }.bind(this));
     },
-    render: function() {
+    render() {
         var items = _.map(this.props.items, function(item) {
             return (<tr onClick={this.edit.bind(null, item)} key={item.id}>
                 <td>{item.id}</td>
@@ -58,18 +60,19 @@ var ProjectList = React.createClass({
 
 module.exports = React.createClass({
     mixins: [Router.Navigation, Reflux.connect(Stores.List, 'list')],
-    componentDidMount: function() {
+    componentDidMount() {
         Actions.list();
     },
-    createProject: function() {
+    createProject() {
         this.transitionTo('repository_create');
     },
-    render: function() {
+    render() {
         return (
             <div className="page-main">
                 <PageHeader>Repositories
                     <small> Manage your playbook repositories</small>
-                    <Button bsStyle="primary" onClick={this.createProject} className="pull-right">Create new  repository</Button>
+                    <Button bsStyle="primary" onClick={this.createProject} className="pull-right">Create new
+                        repository</Button>
                 </PageHeader>
 
                 <ProjectList items={this.state.list}/>
