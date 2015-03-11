@@ -111,24 +111,24 @@ var JobForm = React.createClass({
             <form className="form-horizontal" onSubmit={this.submit}>
                 {error}
 
-                <Input type="text" label="Name" labelClassName="col-xs-2" wrapperClassName="col-xs-10"
+                <Input type="text" label="Name" labelClassName="col-sm-2" wrapperClassName="col-sm-10"
                        valueLink={this.linkState('name')} bsStyle={bsStyle.name}/>
-                <Input type="textarea" label="Description" labelClassName="col-xs-2" wrapperClassName="col-xs-10"
+                <Input type="textarea" label="Description" labelClassName="col-sm-2" wrapperClassName="col-sm-10"
                        valueLink={this.linkState('description')} bsStyle={bsStyle.description}/>
-                <SelectRepository label="Project" labelClassName="col-xs-2" wrapperClassName="col-xs-10"
+                <SelectRepository label="Project" labelClassName="col-sm-2" wrapperClassName="col-sm-10"
                                valueLink={this.linkState('repositoryId')} bsStyle={bsStyle.repositoryId}/>
-                <SelectPlaybook label="Playbook" labelClassName="col-xs-2" wrapperClassName="col-xs-10"
+                <SelectPlaybook label="Playbook" labelClassName="col-sm-2" wrapperClassName="col-sm-10"
                                 ref="selectPlaybook" repository={repositoryId} valueLink={this.linkState('playbook')}
                                 bsStyle={bsStyle.playbook}/>
 
-                <Input type="select" label="Verbosity" labelClassName="col-xs-2" wrapperClassName="col-xs-10"
+                <Input type="select" label="Verbosity" labelClassName="col-sm-2" wrapperClassName="col-sm-10"
                        valueLink={this.linkState('verbosity')} bsStyle={bsStyle.verbosity}>
                     <option value="default">Default</option>
                     <option value="verbose">Verbose</option>
                     <option value="debug">Debug</option>
                 </Input>
 
-                <Input type="submit" value="Save" wrapperClassName="col-xs-offset-2 col-xs-10"/>
+                <Input type="submit" value="Save" wrapperClassName="col-sm-offset-2 col-sm-10"/>
             </form>
         );
     }

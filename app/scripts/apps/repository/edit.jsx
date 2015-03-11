@@ -67,16 +67,16 @@ module.exports = React.createClass({
                 {error}
 
                 <form className="form-horizontal" onSubmit={this.submit}>
-                    <Input type="text" label="Name" labelClassName="col-xs-2" wrapperClassName="col-xs-10" valueLink={this.linkState('name')} bsStyle={bsStyle.name}/>
-                    <Input type="textarea" label="Description" labelClassName="col-xs-2" wrapperClassName="col-xs-10" valueLink={this.linkState('description')} bsStyle={bsStyle.description}/>
-                    <Input type="select" label="Type" labelClassName="col-xs-2" wrapperClassName="col-xs-10" valueLink={this.linkState('type')} bsStyle={bsStyle.type}>
+                    <Input type="text" label="Name" labelClassName="col-sm-2" wrapperClassName="col-sm-10" valueLink={this.linkState('name')} bsStyle={bsStyle.name}/>
+                    <Input type="textarea" label="Description" labelClassName="col-sm-2" wrapperClassName="col-sm-10" valueLink={this.linkState('description')} bsStyle={bsStyle.description}/>
+                    <Input type="select" label="Type" labelClassName="col-sm-2" wrapperClassName="col-sm-10" valueLink={this.linkState('type')} bsStyle={bsStyle.type}>
                         <option value="">Choose</option>
                         <option value="git">Git</option>
                     </Input>
-                    <Input type="text" label="URL" labelClassName="col-xs-2" wrapperClassName="col-xs-10" valueLink={this.linkState('url')} bsStyle={bsStyle.url}/>
-                    <Input type="text" label="Branch" labelClassName="col-xs-2" wrapperClassName="col-xs-10" valueLink={this.linkState('branch')} bsStyle={bsStyle.branch}/>
+                    <Input type="text" label="URL" labelClassName="col-sm-2" wrapperClassName="col-sm-10" valueLink={this.linkState('url')} bsStyle={bsStyle.url}/>
+                    <Input type="text" label="Branch" labelClassName="col-sm-2" wrapperClassName="col-sm-10" valueLink={this.linkState('branch')} bsStyle={bsStyle.branch}/>
 
-                    <Input type="submit" value="Save" wrapperClassName="col-xs-offset-2 col-xs-10"/>
+                    <Input type="submit" value="Save" wrapperClassName="col-sm-offset-2 col-sm-10"/>
                 </form>
             </div>
         );

@@ -2,7 +2,7 @@
 
 var React = require('react'),
     Router = require('react-router'),
-    Bootstrap = require('react-bootstrap'),
+    { Navbar, Nav, NavItem } = require('react-bootstrap'),
     _ = require('lodash');
 
 var pageItems = [
@@ -23,21 +23,22 @@ var Layout = module.exports = React.createClass({
 
         var items = _.map(pageItems, function(obj, i) {
             var isActive = self.isActive(obj.to, obj.params, obj.query);
-            return <Bootstrap.NavItem
+            return <NavItem
                 key={i}
                 onSelect={() => self.transitionTo(obj.to, obj.params, obj.query)}
-                active={isActive}>{obj.text}</Bootstrap.NavItem>;
+                active={isActive}>{obj.text}</NavItem>;
         });
 
         return (
             <div className="page">
-                <Bootstrap.Navbar brand="Ansible Master">
-                    <Bootstrap.Nav>
+                <Navbar brand="Ansible Master" inverse staticTop fluid toggleNavKey={0}>
+                    <Nav right eventKey={0}>
+                        {/* This is the eventKey referenced */}
                         {items}
-                    </Bootstrap.Nav>
-                </Bootstrap.Navbar>
+                    </Nav>
+                </Navbar>
 
-                <div className="container">
+                <div className="container-fluid">
                     <Router.RouteHandler />
                 </div>
             </div>
