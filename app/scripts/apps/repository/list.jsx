@@ -1,6 +1,7 @@
 var React = require('react/addons'),
     Router = require('react-router'),
     { Button, Table, PageHeader } = require('react-bootstrap'),
+    Paging = require('../../components/paging'),
     _ = require('lodash'),
     $ = require('jquery');
 
@@ -75,7 +76,9 @@ module.exports = React.createClass({
                         repository</Button>
                 </PageHeader>
 
-                <ProjectList items={this.state.list}/>
+                <ProjectList items={this.state.list.items}/>
+
+                <Paging paging={this.state.list.paging}/>
             </div>
         );
     }

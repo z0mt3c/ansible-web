@@ -63,12 +63,12 @@ var List = React.createClass({
         return (
             <Table hover>
                 <thead>
-                    <tr>
-                        {columns}
-                    </tr>
+                <tr>
+                    {columns}
+                </tr>
                 </thead>
                 <tbody>
-                    {items}
+                {items}
                 </tbody>
             </Table>
         );

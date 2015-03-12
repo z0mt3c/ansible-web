@@ -2,6 +2,7 @@ var Reflux = require('reflux');
 var reqwest = require('reqwest');
 var _ = require('lodash');
 var Actions = require('../actions/runActions');
+var xResultCount = require('x-result-count');
 
 var Stores = module.exports = {};
 
@@ -10,20 +11,28 @@ Stores.List = Reflux.createStore({
         this.listenTo(Actions.list, this.list);
     },
 
-    list() {
-        reqwest({
+    list(options) {
+        var request = reqwest({
             url: '/api/run',
-            type: 'json'
-        }).then(this.onSuccess, this.onError);
+            type: 'json',
+            data: options || {}
+        });
+        request.then(_.partialRight(this.onSuccess, request), this.onError);
     },
 
-    onSuccess: function(items) {
-        this.update(items);
+    onSuccess: function(items, request) {
+        var resultCount = xResultCount.parse(request.request.getResponseHeader('x-result-count'));
+
+        this.update({
+            paging: resultCount,
+            items: items
+        });
+
         Actions.list.completed(items);
     },
 
     onError: function(error) {
-        this.update([]);
+        this.update(this.getInitialState());
         Actions.list.failed(error);
     },
 
@@ -33,7 +42,11 @@ Stores.List = Reflux.createStore({
     },
 
     getInitialState() {
-        this.list = [];
+        this.list = {
+            paging: {},
+            items: []
+        };
+
         return this.list;
     },
 
@@ -41,6 +54,7 @@ Stores.List = Reflux.createStore({
         return this.list;
     }
 });
+
 
 var io = require('socket.io-client');
 var socket = io();

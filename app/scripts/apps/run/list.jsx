@@ -1,6 +1,7 @@
 var React = require('react/addons'),
     Router = require('react-router'),
     { Button, Table, PageHeader } = require('react-bootstrap'),
+    Paging = require('../../components/paging'),
     _ = require('lodash'),
     $ = require('jquery');
 
@@ -48,6 +49,9 @@ module.exports = React.createClass({
     componentDidMount: function() {
         Actions.list();
     },
+    onPage: function(options) {
+        Actions.list(options)
+    },
     render: function() {
         return (
             <div className="page-main">
@@ -55,7 +59,9 @@ module.exports = React.createClass({
                     <small> Shows all runs of any tasks</small>
                 </PageHeader>
 
-                <RunList items={this.state.list}/>
+                <RunList items={this.state.list.items}/>
+
+                <Paging paging={this.state.list.paging} onPage={this.onPage}/>
             </div>
         );
     }

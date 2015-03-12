@@ -2,6 +2,7 @@ var Reflux = require('reflux');
 var reqwest = require('reqwest');
 var _ = require('lodash');
 var Actions = require('../actions/taskActions');
+var xResultCount = require('x-result-count');
 
 var Stores = module.exports = {};
 
@@ -11,19 +12,26 @@ Stores.List = Reflux.createStore({
     },
 
     list() {
-        reqwest({
+        var request = reqwest({
             url: '/api/task',
             type: 'json'
-        }).then(this.onSuccess, this.onError);
+        });
+        request.then(_.partialRight(this.onSuccess, request), this.onError);
     },
 
-    onSuccess: function(items) {
-        this.update(items);
+    onSuccess: function(items, request) {
+        var resultCount = xResultCount.parse(request.request.getResponseHeader('x-result-count'));
+
+        this.update({
+            paging: resultCount,
+            items: items
+        });
+
         Actions.list.completed(items);
     },
 
     onError: function(error) {
-        this.update([]);
+        this.update(this.getInitialState());
         Actions.list.failed(error);
     },
 
@@ -33,7 +41,11 @@ Stores.List = Reflux.createStore({
     },
 
     getInitialState() {
-        this.list = [];
+        this.list = {
+            paging: {},
+            items: []
+        };
+
         return this.list;
     },
 

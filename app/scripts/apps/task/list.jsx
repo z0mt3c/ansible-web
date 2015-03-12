@@ -1,6 +1,7 @@
 var React = require('react/addons'),
     Router = require('react-router'),
     { Button, Table, PageHeader } = require('react-bootstrap'),
+    Paging = require('../../components/paging'),
     _ = require('lodash'),
     $ = require('jquery');
 
@@ -69,7 +70,9 @@ module.exports = React.createClass({
                     <Button bsStyle="primary" onClick={this.createJob} className="pull-right">Create new task</Button>
                 </PageHeader>
 
-                <JobList items={this.state.list}/>
+                <JobList items={this.state.list.items}/>
+
+                <Paging paging={this.state.list.paging}/>
             </div>
         );
     }
