@@ -1,31 +1,42 @@
 var React = require('react'),
-    {Button} = require('react-bootstrap'),
+    {Button, Pager, PageItem} = require('react-bootstrap'),
     _ = require('lodash');
 
 module.exports = React.createClass({
+    propTypes: {
+        onChange: React.PropTypes.func.isRequired,
+        limit: React.PropTypes.number,
+        page: React.PropTypes.object
+    },
     getInitialState: function() {
-        return this.props.paging || {};
+        return this.props.page;
     },
     componentWillReceiveProps: function(nextProps) {
-        this.setState(nextProps.paging);
+        this.setState(nextProps.page);
     },
-    previousPage(e) {
-        e.preventDefault();
-        this.props.onPage({skip: Math.max(this.state.skip - 10, 0), limit: 10});
+    previousPage() {
+        var skip = Math.max(this.state.skip - this.props.limit, 0);
+        this.props.onChange(skip);
     },
-    nextPage(e) {
-        e.preventDefault();
-        this.props.onPage({skip: Math.min(this.state.skip + 10, this.state.total - 1), limit: 10});
+    nextPage() {
+        var skip = Math.min(this.state.skip + this.props.limit, this.state.total - 1);
+        this.props.onChange(skip);
     },
     render: function() {
-        var prev = this.state.skip > 0 ? <Button ref={prev} onClick={this.previousPage}>PREVIOUS</Button> : null;
-        var next = this.state.total > this.state.skip + this.state.count ? <Button ref={next} className="pull-right" onClick={this.nextPage}>NEXT</Button> : null;
+        var prev = this.state.skip > 0 ? <PageItem previous onSelect={this.previousPage}>&larr; Previous Page</PageItem> : null;
+        var next = this.state.total > this.state.skip + this.state.count ? <PageItem next onSelect={this.nextPage}>Next Page &rarr;</PageItem> : null;
 
         return (
-            <div>
+            <Pager>
                 {prev}
                 {next}
-            </div>
+            </Pager>
         );
+    },
+    getDefaultProps: function() {
+        return {
+            limit: 10,
+            page: {}
+        };
     }
 });

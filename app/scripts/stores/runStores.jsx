@@ -3,6 +3,7 @@ var reqwest = require('reqwest');
 var _ = require('lodash');
 var Actions = require('../actions/runActions');
 var xResultCount = require('x-result-count');
+var utils = require('../utils/utils');
 
 var Stores = module.exports = {};
 
@@ -12,11 +13,14 @@ Stores.List = Reflux.createStore({
     },
 
     list(options) {
+        var params = utils.prepareParams(options);
+
         var request = reqwest({
             url: '/api/run',
             type: 'json',
-            data: options || {}
+            data: params || {}
         });
+
         request.then(_.partialRight(this.onSuccess, request), this.onError);
     },
 

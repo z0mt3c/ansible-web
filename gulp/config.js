@@ -26,6 +26,10 @@ module.exports = {
         src: src + '/images/**',
         dest: dest + '/images'
     },
+    fonts: {
+        src: './node_modules/font-awesome/fonts/*',
+        dest: dest + '/fonts'
+    },
     clean: {
         dest: dest
     },
