@@ -1,78 +1,87 @@
 var React = require('react/addons'),
     Router = require('react-router'),
-    { Button, Table, PageHeader } = require('react-bootstrap'),
-    Paging = require('../../components/paging'),
+    { Button, ButtonGroup, Table, PageHeader } = require('react-bootstrap'),
     _ = require('lodash'),
+    Icon = require('react-fa/dist/Icon'),
+    ListMixin = require('../../mixins/list'),
     $ = require('jquery');
 
 var Reflux = require('reflux');
 var Actions = require('../../actions/taskActions');
 var Stores = require('../../stores/taskStores');
 
-var JobList = React.createClass({
-    mixins: [Router.Navigation],
+var TaskList = React.createClass({
+    mixins: [Router.Navigation, Reflux.connect(Stores.List, 'list'), ListMixin],
+    listAction: Actions.list,
+    columns: [
+        {field: 'name', title: 'Name', filter: true, sort: true},
+        {field: 'type', title: 'Type', filter: true, sort: true},
+        {field: 'actions', title: 'Actions', filter: false, sort: false}
+    ],
     propTypes: {
-        items: React.PropTypes.array
+        limit: React.PropTypes.number,
+        skip: React.PropTypes.number,
+        sort: React.PropTypes.string
     },
-    run: function(item, e) {
+    componentDidMount() {
+        this.load();
+    },
+    renderRow(item) {
+        return (<tr onClick={this.edit.bind(null, item)} key={item.id}>
+            <td>{item.name}</td>
+            <td>{item.type}</td>
+            <td>
+                <Button onClick={this.run.bind(null, item)} bsSize="small"><Icon name="rocket"/></Button>
+                {' '}
+                <Button onClick={this.edit.bind(null, item)} bsSize="small"><Icon name="edit"/></Button>
+                {' '}
+                <Button onClick={this.remove.bind(null, item)} bsSize="small"><Icon name="remove"/></Button>
+            </td>
+        </tr>);
+    },
+    run(item, e) {
         e.preventDefault();
         e.stopPropagation();
         Actions.run.triggerPromise(item.id).then(function(data) {
             this.transitionTo('run_detail', {id: data.runId});
         }.bind(this));
     },
-    editJob: function(obj) {
+    edit(obj, e) {
+        e.preventDefault();
         this.transitionTo('task_edit', {id: obj.id});
     },
-    render: function() {
-        var items = _.map(this.props.items, function(item) {
-            return (<tr onClick={this.editJob.bind(null, item)} key={item.id}>
-                <td>{item.id}</td>
-                <td>{item.type}</td>
-                <td>{item.name}</td>
-                <td>{item.description}</td>
-                <td><Button onClick={this.run.bind(null, item)}>RUN</Button></td>
-            </tr>)
+    remove(obj, e) {
+        e.preventDefault();
+        this.transitionTo('task_edit', {id: obj.id});
+    },
+    sync(obj, e) {
+        e.preventDefault();
+        e.stopPropagation();
+        Actions.sync.triggerPromise(obj.id).then(function(data) {
+            this.transitionTo('run_detail', {id: data.runId});
         }.bind(this));
-
-        return (
-            <Table hover>
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Type</th>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                {items}
-                </tbody>
-            </Table>
-        );
+    },
+    render() {
+        return this._render();
     }
 });
 
 module.exports = React.createClass({
-    mixins: [Router.Navigation, Reflux.connect(Stores.List, 'list')],
-    componentDidMount: function() {
-        Actions.list();
+    mixins: [Router.Navigation],
+    componentDidMount() {
     },
-    createJob: function() {
+    createTask() {
         this.transitionTo('task_create');
     },
-    render: function() {
+    render() {
         return (
             <div className="page-main">
                 <PageHeader>Tasks
                     <small> Manage your playbook execution tasks</small>
-                    <Button bsStyle="primary" onClick={this.createJob} className="pull-right">Create new task</Button>
+                    <Button bsStyle="primary" onClick={this.createTask} className="pull-right">Create new task</Button>
                 </PageHeader>
 
-                <JobList items={this.state.list.items}/>
-
-                <Paging paging={this.state.list.paging}/>
+                <TaskList />
             </div>
         );
     }

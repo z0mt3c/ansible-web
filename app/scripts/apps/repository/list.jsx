@@ -1,7 +1,8 @@
 var React = require('react/addons'),
     Router = require('react-router'),
     { Button, Table, PageHeader } = require('react-bootstrap'),
-    Paging = require('../../components/paging'),
+    ListMixin = require('../../mixins/list'),
+    Icon = require('react-fa/dist/Icon'),
     _ = require('lodash'),
     $ = require('jquery');
 
@@ -9,12 +10,34 @@ var Reflux = require('reflux');
 var Actions = require('../../actions/repositoryActions');
 var Stores = require('../../stores/repositoryStores');
 
-var ProjectList = React.createClass({
-    mixins: [Router.Navigation],
+var RepositoryList = React.createClass({
+    mixins: [Router.Navigation, Reflux.connect(Stores.List, 'list'), ListMixin],
+    listAction: Actions.list,
+    columns: [
+        {field: 'name', title: 'Name', filter: true, sort: true},
+        {field: 'type', title: 'Type', filter: true, sort: true},
+        {field: 'url', title: 'URL', filter: true, sort: true},
+        {field: 'branch', title: 'Branch', filter: true, sort: true},
+        {field: 'actions', title: 'Actions', filter: false, sort: false}
+    ],
     propTypes: {
-        items: React.PropTypes.array
+        limit: React.PropTypes.number,
+        skip: React.PropTypes.number,
+        sort: React.PropTypes.string
     },
-    edit(obj, e) {
+    componentDidMount() {
+        this.load();
+    },
+    renderRow(item) {
+        return (<tr onClick={this.clickItem.bind(null, item)} key={item.id}>
+            <td>{item.name}</td>
+            <td>{item.type}</td>
+            <td>{item.url}</td>
+            <td>{item.branch}</td>
+            <td><Button onClick={this.sync.bind(null, item)} bsSize="small"><Icon name="refresh"/></Button></td>
+        </tr>);
+    },
+    clickItem(obj, e) {
         e.preventDefault();
         this.transitionTo('repository_edit', {id: obj.id});
     },
@@ -26,45 +49,15 @@ var ProjectList = React.createClass({
         }.bind(this));
     },
     render() {
-        var items = _.map(this.props.items, function(item) {
-            return (<tr onClick={this.edit.bind(null, item)} key={item.id}>
-                <td>{item.id}</td>
-                <td>{item.name}</td>
-                <td>{item.type}</td>
-                <td>{item.description}</td>
-                <td>{item.url}</td>
-                <td>{item.branch}</td>
-                <td><Button onClick={this.sync.bind(null, item)}>SYNC</Button></td>
-            </tr>)
-        }.bind(this));
-
-        return (
-            <Table hover>
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th>Description</th>
-                    <th>Url</th>
-                    <th>Branch</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                {items}
-                </tbody>
-            </Table>
-        );
+        return this._render();
     }
 });
 
 module.exports = React.createClass({
-    mixins: [Router.Navigation, Reflux.connect(Stores.List, 'list')],
+    mixins: [Router.Navigation],
     componentDidMount() {
-        Actions.list();
     },
-    createProject() {
+    createRepository() {
         this.transitionTo('repository_create');
     },
     render() {
@@ -72,13 +65,11 @@ module.exports = React.createClass({
             <div className="page-main">
                 <PageHeader>Repositories
                     <small> Manage your playbook repositories</small>
-                    <Button bsStyle="primary" onClick={this.createProject} className="pull-right">Create new
+                    <Button bsStyle="primary" onClick={this.createRepository} className="pull-right">Create new
                         repository</Button>
                 </PageHeader>
 
-                <ProjectList items={this.state.list.items}/>
-
-                <Paging paging={this.state.list.paging}/>
+                <RepositoryList />
             </div>
         );
     }
