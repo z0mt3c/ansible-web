@@ -65,11 +65,6 @@ var JobForm = React.createClass({
         if (params.id) {
             Actions.get(params.id);
         }
-
-        this.listenTo(Actions.update.completed, this.completed);
-        this.listenTo(Actions.create.completed, this.completed);
-        this.listenTo(Actions.update.failed, this.failed);
-        this.listenTo(Actions.create.failed, this.failed);
     },
     completed() {
         this.props.onSave();
@@ -85,9 +80,9 @@ var JobForm = React.createClass({
         var params = this.getParams();
 
         if (params.id) {
-            Actions.update(this.state);
+            Actions.update.triggerPromise(this.state).then(this.completed, this.failed);
         } else {
-            Actions.create(this.state);
+            Actions.create.triggerPromise(this.state).then(this.completed, this.failed);
         }
     },
     render() {

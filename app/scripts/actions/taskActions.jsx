@@ -1,5 +1,6 @@
 var Reflux = require('reflux');
 var reqwest = require('reqwest');
+var rootResource = '/api/task';
 
 var Actions = Reflux.createActions(
     {
@@ -15,7 +16,7 @@ var Actions = Reflux.createActions(
 Actions.create.listen(function(job) {
     reqwest({
         method: 'post',
-        url: '/api/task',
+        url: rootResource,
         type: 'json',
         data: job
     }).then(this.completed, this.failed);
@@ -24,7 +25,7 @@ Actions.create.listen(function(job) {
 Actions.delete.listen(function(id) {
     reqwest({
         method: 'delete',
-        url: '/api/task/' + id,
+        url: rootResource + '/' + id,
         type: 'json'
     }).then(this.completed, this.failed);
 });
@@ -32,7 +33,7 @@ Actions.delete.listen(function(id) {
 Actions.update.listen(function(job) {
     return reqwest({
         method: 'put',
-        url: '/api/task/' + job.id,
+        url: rootResource + '/' + job.id,
         type: 'json',
         data: job
     }).then(this.completed, this.failed);
@@ -41,7 +42,7 @@ Actions.update.listen(function(job) {
 Actions.run.listen(function(id) {
     return reqwest({
         method: 'post',
-        url: '/api/task/' + id + '/run',
+        url: rootResource + '/' + id + '/run',
         type: 'json'
     }).then(this.completed, this.failed);
 });

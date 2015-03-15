@@ -37,16 +37,22 @@ var routes = module.exports = (
             <Route name="repository_edit" handler={RepositoryApp.Edit} path=":id" />
         </Route>
 
-        <Route name="inventory_list" path="/inventories">
+        <Route name="inventory_list" path="/inventorys">
             <DefaultRoute handler={InventoryApp.List} />
+            <Route name="inventory_create" handler={InventoryApp.Edit} path="new" />
+            <Route name="inventory_edit" handler={InventoryApp.Edit} path=":id" />
         </Route>
 
-      <Route name="user_list" path="/users">
+        <Route name="user_list" path="/users">
             <DefaultRoute handler={UserApp.List} />
+            <Route name="user_create" handler={UserApp.Edit} path="new" />
+            <Route name="user_edit" handler={UserApp.Edit} path=":id" />
         </Route>
 
         <Route name="credential_list" path="/credentials">
             <DefaultRoute handler={CredentialApp.List} />
+            <Route name="credential_create" handler={CredentialApp.Edit} path="new" />
+            <Route name="credential_edit" handler={CredentialApp.Edit} path=":id" />
         </Route>
 
         <NotFoundRoute handler={Generic.NotFound}/>
