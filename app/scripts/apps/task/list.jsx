@@ -16,7 +16,7 @@ var TaskList = React.createClass({
     columns: [
         {field: 'name', title: 'Name', filter: true, sort: true},
         {field: 'type', title: 'Type', filter: true, sort: true},
-        {field: 'actions', title: 'Actions', filter: false, sort: false}
+        {field: 'actions', title: 'Actions', filter: false, sort: false, hide: true, className: 'actions'}
     ],
     propTypes: {
         limit: React.PropTypes.number,
@@ -30,7 +30,7 @@ var TaskList = React.createClass({
         return (<tr onClick={this.edit.bind(null, item)} key={item.id}>
             <td>{item.name}</td>
             <td>{item.type}</td>
-            <td>
+            <td className="actions">
                 <Button onClick={this.run.bind(null, item)} bsSize="small"><Icon name="rocket"/></Button>
                 {' '}
                 <Button onClick={this.edit.bind(null, item)} bsSize="small"><Icon name="edit"/></Button>

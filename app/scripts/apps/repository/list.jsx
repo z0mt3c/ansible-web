@@ -18,7 +18,7 @@ var RepositoryList = React.createClass({
         {field: 'type', title: 'Type', filter: true, sort: true},
         {field: 'url', title: 'URL', filter: true, sort: true},
         {field: 'branch', title: 'Branch', filter: true, sort: true},
-        {field: 'actions', title: 'Actions', filter: false, sort: false}
+        {field: 'actions', title: 'Actions', filter: false, sort: false, hide: true, className: 'actions'}
     ],
     propTypes: {
         limit: React.PropTypes.number,
@@ -34,7 +34,7 @@ var RepositoryList = React.createClass({
             <td>{item.type}</td>
             <td>{item.url}</td>
             <td>{item.branch}</td>
-            <td><Button onClick={this.sync.bind(null, item)} bsSize="small"><Icon name="refresh"/></Button></td>
+            <td className="actions"><Button onClick={this.sync.bind(null, item)} bsSize="small"><Icon name="refresh"/></Button></td>
         </tr>);
     },
     clickItem(obj, e) {

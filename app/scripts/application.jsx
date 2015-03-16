@@ -35,6 +35,7 @@ var Layout = module.exports = React.createClass({
                     <Nav right eventKey={0}>
                         {/* This is the eventKey referenced */}
                         {items}
+                        <NavItem href="/logout">Logout</NavItem>
                     </Nav>
                 </Navbar>
 

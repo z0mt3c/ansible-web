@@ -14,7 +14,7 @@ var InventoryList = React.createClass({
     listAction: Actions.list,
     columns: [
         {field: 'name', title: 'Name', filter: true, sort: true},
-        {field: 'actions', title: 'Actions', filter: false, sort: false}
+        {field: 'actions', title: 'Actions', filter: false, sort: false, hide: true, className: 'actions'}
     ],
     propTypes: {
         limit: React.PropTypes.number,
@@ -27,7 +27,7 @@ var InventoryList = React.createClass({
     renderRow(item) {
         return (<tr onClick={this.edit.bind(null, item)} key={item.id}>
             <td>{item.name}</td>
-            <td>
+            <td className="actions">
                 <Button onClick={this.edit.bind(null, item)} bsSize="small"><Icon name="edit"/></Button>
                 {' '}
                 <Button onClick={this.remove.bind(null, item)} bsSize="small"><Icon name="remove"/></Button>

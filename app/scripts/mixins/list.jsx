@@ -41,11 +41,13 @@ module.exports = {
     _renderHeader(column, i) {
         if (column.sort !== false) {
             var sort = this.state.params.sort;
-            return <th key={i}>
+            return <th key={i} className={column.className}>
                 <Sortable field={column.field} sort={sort} onSort={this.changeSort}>{column.title}</Sortable>
             </th>;
+        } if (column.hide === true) {
+            return <th key={i} className={column.className}></th>
         } else {
-            return <th key={i}>{column.title}</th>
+            return <th key={i} className={column.className}>{column.title}</th>
         }
     },
 

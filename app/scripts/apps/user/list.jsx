@@ -15,7 +15,7 @@ var UserList = React.createClass({
     columns: [
         {field: 'name', title: 'Name', filter: true, sort: true},
         {field: 'email', title: 'Email', filter: true, sort: true},
-        {field: 'actions', title: 'Actions', filter: false, sort: false}
+        {field: 'actions', title: 'Actions', filter: false, sort: false, hide: true, className: 'actions'}
     ],
     propTypes: {
         limit: React.PropTypes.number,
@@ -29,7 +29,7 @@ var UserList = React.createClass({
         return (<tr onClick={this.edit.bind(null, item)} key={item.id}>
             <td>{item.name}</td>
             <td>{item.email}</td>
-            <td>
+            <td className="actions">
                 <Button onClick={this.edit.bind(null, item)} bsSize="small"><Icon name="edit"/></Button>
                 {' '}
                 <Button onClick={this.remove.bind(null, item)} bsSize="small"><Icon name="remove"/></Button>
