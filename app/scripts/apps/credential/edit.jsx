@@ -58,6 +58,8 @@ var CredentialForm = React.createClass({
 
                 <Input type="text" label="Name" labelClassName="col-sm-2" wrapperClassName="col-sm-10"
                        valueLink={this.linkState('name')} bsStyle={bsStyle.name}/>
+                <Input type="text" label="Path" labelClassName="col-sm-2" wrapperClassName="col-sm-10"
+                       valueLink={this.linkState('path')} bsStyle={bsStyle.path}/>
 
                 <Input type="submit" value="Save" wrapperClassName="col-sm-offset-2 col-sm-10"/>
             </form>

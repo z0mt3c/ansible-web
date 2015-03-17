@@ -30,8 +30,10 @@ Actions.delete.listen(function(id) {
 });
 
 Actions.update.listen(function(project) {
+    console.log(project.active)
+    project.active = !!project.active;
     return reqwest({
-        method: 'put',
+        method: 'patch',
         url: rootResource + '/' + project.id,
         type: 'json',
         data: project

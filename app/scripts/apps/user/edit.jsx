@@ -62,6 +62,8 @@ var UserForm = React.createClass({
                     valueLink={this.linkState('email')} bsStyle={bsStyle.email}/>
                 <Input type="text" label="Password" labelClassName="col-sm-2" wrapperClassName="col-sm-10"
                     valueLink={this.linkState('password')} bsStyle={bsStyle.password}/>
+                <Input type="checkbox" label="Active" wrapperClassName="col-sm-10 col-sm-offset-2"
+                    valueLink={this.linkState('active')} bsStyle={bsStyle.active}/>
 
                 <Input type="submit" value="Save" wrapperClassName="col-sm-offset-2 col-sm-10"/>
             </form>

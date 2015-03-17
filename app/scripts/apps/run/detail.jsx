@@ -8,6 +8,9 @@ var Reflux = require('reflux');
 var Actions = require('../../actions/runActions');
 var Stores = require('../../stores/runStores');
 
+var Convert = require('../../utils/ansi');
+var convert = new Convert();
+
 var badgeForTask = function(task) {
     switch (task) {
         case 'runner_on_failed':
@@ -99,7 +102,10 @@ module.exports = React.createClass({
     render: function() {
         var lineNo = 0;
         var log = _.reduce(this.state.output, function(memo, output) {
-            var lines = output.data.split('\n');
+            var data = output.data;
+            data = convert.toHtml(data);
+            var lines = data.split('\n');
+                console.log(data);
 
             memo = memo.concat(_.map(lines, function(lineData, n) {
                 if (lineData === '' && n === lines.length - 1) {
@@ -125,7 +131,7 @@ module.exports = React.createClass({
 
                 return (<p className={output.channel + ' ' + lineClass} key={++lineNo}>
                     <a></a>
-                    <span>{lineData}</span>
+                    <span dangerouslySetInnerHTML={{__html: lineData}}/>
                 </p>);
             }));
             return memo;
