@@ -268,7 +268,12 @@ Filter = (function() {
     };
 
     Filter.prototype.pushText = function(text) {
-        return text;
+        //return text;
+        return text ? text.replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&apos;') : text;
     };
 
     Filter.prototype.pushStyle = function(style) {

@@ -9,21 +9,43 @@ var Actions = require('../../actions/taskActions');
 var Stores = require('../../stores/taskStores');
 var RepositoryActions = require('../../actions/repositoryActions');
 var RepositoryStores = require('../../stores/repositoryStores');
+var CredentialActions = require('../../actions/credentialActions');
+var CredentialStores = require('../../stores/credentialStores');
+
+var SelectCredential = React.createClass({
+    mixins: [Reflux.connect(CredentialStores.List, 'credentials')],
+    componentDidMount() {
+        CredentialActions.list({ limit: 9999 });
+    },
+    render() {
+        var options = [{id: '', name: 'Nothing'}].concat(this.state.credentials.items || []);
+        return React.createElement(Input, React.__spread({}, this.props, {
+                type: 'select',
+                ref: 'input',
+                key: 'input'
+            }),
+            _.map(options, function(credential) {
+                console.log(credential);
+                return (<option value={credential.id} key={credential.id}>{credential.name}</option>);
+            })
+        );
+    }
+});
 
 var SelectRepository = React.createClass({
     mixins: [Reflux.connect(RepositoryStores.List, 'repositories')],
     componentDidMount() {
-        RepositoryActions.list();
+        RepositoryActions.list({ limit: 9999 });
     },
     render() {
-        var options = [{id: '', name: 'Nothing'}].concat(this.state.repositories);
-
+        var options = [{id: '', name: 'Nothing'}].concat(this.state.repositories.items || []);
         return React.createElement(Input, React.__spread({}, this.props, {
                 type: 'select',
                 ref: 'input',
                 key: 'input'
             }),
             _.map(options, function(repository) {
+                console.log(repository);
                 return (<option value={repository.id} key={repository.id}>{repository.name}</option>);
             })
         );
@@ -115,6 +137,8 @@ var JobForm = React.createClass({
                 <SelectPlaybook label="Playbook" labelClassName="col-sm-2" wrapperClassName="col-sm-10"
                                 ref="selectPlaybook" repository={repositoryId} valueLink={this.linkState('playbook')}
                                 bsStyle={bsStyle.playbook}/>
+                <SelectCredential label="Credential" labelClassName="col-sm-2" wrapperClassName="col-sm-10"
+                    valueLink={this.linkState('credentialId')} bsStyle={bsStyle.credentialId}/>
 
                 <Input type="select" label="Verbosity" labelClassName="col-sm-2" wrapperClassName="col-sm-10"
                        valueLink={this.linkState('verbosity')} bsStyle={bsStyle.verbosity}>

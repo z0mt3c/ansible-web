@@ -102,36 +102,16 @@ module.exports = React.createClass({
     render: function() {
         var lineNo = 0;
         var log = _.reduce(this.state.output, function(memo, output) {
-            var data = output.data;
-            data = convert.toHtml(data);
-            var lines = data.split('\n');
-                console.log(data);
+            var lines = output.data.split('\n');
 
             memo = memo.concat(_.map(lines, function(lineData, n) {
                 if (lineData === '' && n === lines.length - 1) {
                     return null;
                 }
 
-                var lineClass = '';
-                if (lineData.indexOf('PLAY ') === 0) {
-                    lineClass = 'play';
-                } else if (lineData.indexOf('GATHERING FACTS') === 0) {
-                    lineClass = 'gathering';
-                } else if (lineData.indexOf('TASK: ') === 0) {
-                    lineClass = 'task';
-                } else if (lineData.indexOf('ok:') === 0) {
-                    lineClass = 'host-ok';
-                } else if (lineData.indexOf('changed:') === 0) {
-                    lineClass = 'host-changed';
-                } else if (lineData.indexOf('skipping:') === 0) {
-                    lineClass = 'host-skipping';
-                } else if (lineData.indexOf('fatal:') === 0) {
-                    lineClass = 'host-fatal';
-                }
-
-                return (<p className={output.channel + ' ' + lineClass} key={++lineNo}>
+                return (<p className={output.channel} key={++lineNo}>
                     <a></a>
-                    <span dangerouslySetInnerHTML={{__html: lineData}}/>
+                    <span dangerouslySetInnerHTML={{__html: convert.toHtml(lineData)}}/>
                 </p>);
             }));
             return memo;
