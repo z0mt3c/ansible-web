@@ -2,8 +2,8 @@ var React = require('react/addons'),
     Router = require('react-router'),
     { Button, ButtonGroup, Table, PageHeader } = require('react-bootstrap'),
     _ = require('lodash'),
-    Icon = require('react-fa/dist/Icon'),
     ListMixin = require('../../mixins/list'),
+    Icon = require('react-fa/dist/Icon'),
     $ = require('jquery');
 
 var Reflux = require('reflux');
@@ -27,15 +27,15 @@ var TaskList = React.createClass({
         this.load();
     },
     renderRow(item) {
-        return (<tr onClick={this.edit.bind(null, item)} key={item.id}>
+        return (<tr key={item.id} onClick={this._click.bind(null, item)}>
             <td>{item.name}</td>
             <td>{item.type}</td>
             <td className="actions">
                 <Button onClick={this.run.bind(null, item)} bsSize="small"><Icon name="rocket"/></Button>
                 {' '}
-                <Button onClick={this.edit.bind(null, item)} bsSize="small"><Icon name="edit"/></Button>
+                {this._renderEdit(item)}
                 {' '}
-                <Button onClick={this.remove.bind(null, item)} bsSize="small"><Icon name="remove"/></Button>
+                {this._renderDelete(item)}
             </td>
         </tr>);
     },
@@ -50,9 +50,12 @@ var TaskList = React.createClass({
         e.preventDefault();
         this.transitionTo('task_edit', {id: obj.id});
     },
-    remove(obj, e) {
+    delete(obj, e) {
         e.preventDefault();
-        this.transitionTo('task_edit', {id: obj.id});
+
+        Actions.delete.triggerPromise(obj.id).then(function() {
+            this.load();
+        }.bind(this));
     },
     sync(obj, e) {
         e.preventDefault();

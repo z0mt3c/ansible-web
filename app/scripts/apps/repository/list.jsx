@@ -29,17 +29,31 @@ var RepositoryList = React.createClass({
         this.load();
     },
     renderRow(item) {
-        return (<tr onClick={this.clickItem.bind(null, item)} key={item.id}>
+        return (<tr key={item.id} onClick={this._click.bind(null, item)} >
             <td>{item.name}</td>
             <td>{item.type}</td>
             <td>{item.url}</td>
             <td>{item.branch}</td>
-            <td className="actions"><Button onClick={this.sync.bind(null, item)} bsSize="small"><Icon name="refresh"/></Button></td>
+            <td className="actions">
+                <Button onClick={this.sync.bind(null, item)} bsSize="small">
+                    <Icon name="refresh"/>
+                </Button>
+                {' '}
+                {this._renderEdit(item)}
+                {' '}
+                {this._renderDelete(item)}
+            </td>
         </tr>);
     },
-    clickItem(obj, e) {
+    edit(obj, e) {
         e.preventDefault();
         this.transitionTo('repository_edit', {id: obj.id});
+    },
+    delete(obj, e) {
+        e.preventDefault();
+        Actions.delete.triggerPromise(obj.id).then(function() {
+            this.load();
+        }.bind(this));
     },
     sync(obj, e) {
         e.preventDefault();

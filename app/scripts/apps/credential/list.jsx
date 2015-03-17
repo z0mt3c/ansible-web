@@ -25,12 +25,12 @@ var CredentialList = React.createClass({
         this.load();
     },
     renderRow(item) {
-        return (<tr onClick={this.edit.bind(null, item)} key={item.id}>
+        return (<tr onClick={this._click.bind(null, item)} key={item.id}>
             <td>{item.name}</td>
             <td className="actions">
-                <Button onClick={this.edit.bind(null, item)} bsSize="small"><Icon name="edit"/></Button>
+                {this._renderEdit(item)}
                 {' '}
-                <Button onClick={this.remove.bind(null, item)} bsSize="small"><Icon name="remove"/></Button>
+                {this._renderDelete(item)}
             </td>
         </tr>);
     },
@@ -38,9 +38,11 @@ var CredentialList = React.createClass({
         e.preventDefault();
         this.transitionTo('credential_edit', {id: obj.id});
     },
-    remove(obj, e) {
+    delete(obj, e) {
         e.preventDefault();
-        this.transitionTo('credential_edit', {id: obj.id});
+        Actions.delete.triggerPromise(obj.id).then(function() {
+            this.load();
+        }.bind(this));
     },
     render() {
         return this._render();

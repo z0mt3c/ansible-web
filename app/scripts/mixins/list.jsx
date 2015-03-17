@@ -1,5 +1,7 @@
 var _ = require('lodash');
-var { Button, Table, PageHeader, Input } = require('react-bootstrap');
+var { Button, Table, PageHeader, Input, ModalTrigger } = require('react-bootstrap');
+var Icon = require('react-fa/dist/Icon');
+var ModalDelete = require('../components/modal-delete');
 var Paging = require('../components/paging');
 var Sortable = require('../components/sortable');
 
@@ -29,6 +31,35 @@ module.exports = {
         return this.state.list.items;
     },
 
+    _click(obj, e) {
+        var tagName = e.target.tagName;
+        if (tagName !== 'BUTTON' && tagName !== 'SPAN') {
+            if (this.detail) {
+                this.detail(obj, e);
+            } else if (this.edit) {
+                this.edit(obj, e);
+            }
+        }
+    },
+
+    _renderEdit(item) {
+        if (this.edit) {
+            return <Button onClick={this.edit.bind(null, item)} bsSize="small">
+                <Icon name="edit"/>
+            </Button>;
+        }
+    },
+
+    _renderDelete(item) {
+        if (this.delete) {
+            return <ModalTrigger modal={<ModalDelete container={this} onConfirm={this.delete.bind(null, item)}/>} container={this}>
+                <Button bsSize="small">
+                    <Icon name="remove"/>
+                </Button>
+            </ModalTrigger>;
+        }
+    },
+
     _renderRow(item) {
         return (<tr onClick={this.clickItem.bind(null, item)} key={item.id}>
             <td>{item.id}</td>
@@ -44,7 +75,8 @@ module.exports = {
             return <th key={i} className={column.className}>
                 <Sortable field={column.field} sort={sort} onSort={this.changeSort}>{column.title}</Sortable>
             </th>;
-        } if (column.hide === true) {
+        }
+        if (column.hide === true) {
             return <th key={i} className={column.className}></th>
         } else {
             return <th key={i} className={column.className}>{column.title}</th>
@@ -72,9 +104,9 @@ module.exports = {
 
         return <Table hover>
             <thead>
-            <tr>
+                <tr>
                 {headers}
-            </tr>
+                </tr>
             </thead>
             <tbody>
             {items}
