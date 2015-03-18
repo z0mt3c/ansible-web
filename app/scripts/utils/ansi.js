@@ -6,7 +6,7 @@ STYLES = {
     'ef1': 'color:#A00',
     'ef2': 'color:#0A0',
     'ef3': 'color:#A50',
-    'ef4': 'color:#00A',
+    'ef4': 'color:#878FFF',
     'ef5': 'color:#A0A',
     'ef6': 'color:#0AA',
     'ef7': 'color:#AAA',
