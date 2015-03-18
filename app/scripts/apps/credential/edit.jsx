@@ -36,6 +36,21 @@ var CredentialForm = React.createClass({
             Actions.create.triggerPromise(this.state).then(this.completed, this.failed);
         }
     },
+    onDragOver(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'copy';
+    },
+    onDrop(e) {
+        e.preventDefault();
+        var file = _.first(e.dataTransfer.files);
+        var reader = new FileReader();
+
+        reader.onload = function(e) {
+            this.setState({ sshKey: e.target.result });
+        }.bind(this);
+
+        reader.readAsText(file, 'utf8');
+    },
     render() {
         var error = '';
         var state = this.state;
@@ -56,10 +71,21 @@ var CredentialForm = React.createClass({
             <form className="form-horizontal" onSubmit={this.submit}>
                 {error}
 
-                <Input type="text" label="Name" labelClassName="col-sm-2" wrapperClassName="col-sm-10"
-                       valueLink={this.linkState('name')} bsStyle={bsStyle.name}/>
-                <Input type="text" label="Path" labelClassName="col-sm-2" wrapperClassName="col-sm-10"
-                       valueLink={this.linkState('path')} bsStyle={bsStyle.path}/>
+                <Input type="text" label="Name" labelClassName="col-sm-2" wrapperClassName="col-sm-10" valueLink={this.linkState('name')} bsStyle={bsStyle.name}/>
+                <Input type="textarea" label="Description" labelClassName="col-sm-2" wrapperClassName="col-sm-10" valueLink={this.linkState('description')} bsStyle={bsStyle.description}/>
+                <Input type="text" label="SSH User" labelClassName="col-sm-2" wrapperClassName="col-sm-10" valueLink={this.linkState('sshUser')} bsStyle={bsStyle.sshUser}/>
+
+                <Input type="select" label="SSH Auth Type" labelClassName="col-sm-2" wrapperClassName="col-sm-10" valueLink={this.linkState('sshAuthType')} bsStyle={bsStyle.sshAuthType}>
+                    <option value="">Choose</option>
+                    <option value="password">Password</option>
+                    <option value="key">Key</option>
+                    <option value="keyPath">Path to key</option>
+                </Input>
+
+                {this.state.sshAuthType === 'password' ? <Input type="password" label="SSH Password" labelClassName="col-sm-2" wrapperClassName="col-sm-10" valueLink={this.linkState('sshPassword')} bsStyle={bsStyle.sshPassword}/> : null}
+                {this.state.sshAuthType === 'key' ? <Input type="textarea" label="SSH Key" labelClassName="col-sm-2" wrapperClassName="col-sm-10" onDragOver={this.onDragOver} onDrop={this.onDrop} valueLink={this.linkState('sshKey')} bsStyle={bsStyle.sshKey}/> : null}
+                {this.state.sshAuthType === 'keyPath' ? <Input type="text" label="SSH Key Path" labelClassName="col-sm-2" wrapperClassName="col-sm-10" valueLink={this.linkState('sshKeyPath')} bsStyle={bsStyle.sshKeyPath}/> : null}
+                {this.state.sshAuthType === 'key' || this.state.sshAuthType === 'keyPath' ? <Input type="text" label="SSH Key Password" labelClassName="col-sm-2" wrapperClassName="col-sm-10" valueLink={this.linkState('sshKeyPassword')} bsStyle={bsStyle.sshKeyPassword}/> : null}
 
                 <Input type="submit" value="Save" wrapperClassName="col-sm-offset-2 col-sm-10"/>
             </form>

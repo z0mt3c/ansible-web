@@ -53,7 +53,7 @@ var SelectRepository = React.createClass({
 });
 
 var SelectPlaybook = React.createClass({
-    mixins: [Reflux.connect(RepositoryStores.Files, 'files'), Reflux.connect(Stores.Get, 'repository')],
+    mixins: [Reflux.connect(RepositoryStores.Files, 'files')],
     propTypes: {
         repository: React.PropTypes.string
     },
@@ -132,7 +132,8 @@ var JobForm = React.createClass({
                        valueLink={this.linkState('name')} bsStyle={bsStyle.name}/>
                 <Input type="textarea" label="Description" labelClassName="col-sm-2" wrapperClassName="col-sm-10"
                        valueLink={this.linkState('description')} bsStyle={bsStyle.description}/>
-                <SelectRepository label="Project" labelClassName="col-sm-2" wrapperClassName="col-sm-10"
+
+                <SelectRepository label="Repository" labelClassName="col-sm-2" wrapperClassName="col-sm-10"
                                valueLink={this.linkState('repositoryId')} bsStyle={bsStyle.repositoryId}/>
                 <SelectPlaybook label="Playbook" labelClassName="col-sm-2" wrapperClassName="col-sm-10"
                                 ref="selectPlaybook" repository={repositoryId} valueLink={this.linkState('playbook')}
