@@ -10,6 +10,7 @@ var pageItems = [
     {text: 'Users', to: 'user_list'},
     {text: 'Credentials', to: 'credential_list'},
     {text: 'Inventories', to: 'inventory_list'},
+    {text: 'Hosts', to: 'host_list'},
     {text: 'Repositories', to: 'repository_list'},
     {text: 'Tasks', to: 'task_list'},
     {text: 'Runs', to: 'run_list'}

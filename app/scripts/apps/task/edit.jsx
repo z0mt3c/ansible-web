@@ -1,6 +1,6 @@
 var React = require('react/addons'),
     Router = require('react-router'),
-    { Alert, Input, PageHeader } = require('react-bootstrap'),
+    { Alert, Input, InputGroup, PageHeader, Row, Col, Button } = require('react-bootstrap'),
     _ = require('lodash'),
     $ = require('jquery');
 
@@ -15,17 +15,16 @@ var CredentialStores = require('../../stores/credentialStores');
 var SelectCredential = React.createClass({
     mixins: [Reflux.connect(CredentialStores.List, 'credentials')],
     componentDidMount() {
-        CredentialActions.list({ limit: 9999 });
+        CredentialActions.list({limit: 9999});
     },
     render() {
-        var options = [{id: '', name: 'Nothing'}].concat(this.state.credentials.items || []);
+        var options = [{id: '', name: 'Nothing'}].concat(this.state.credentials.items || []);
         return React.createElement(Input, React.__spread({}, this.props, {
                 type: 'select',
                 ref: 'input',
                 key: 'input'
             }),
             _.map(options, function(credential) {
-                console.log(credential);
                 return (<option value={credential.id} key={credential.id}>{credential.name}</option>);
             })
         );
@@ -35,17 +34,16 @@ var SelectCredential = React.createClass({
 var SelectRepository = React.createClass({
     mixins: [Reflux.connect(RepositoryStores.List, 'repositories')],
     componentDidMount() {
-        RepositoryActions.list({ limit: 9999 });
+        RepositoryActions.list({limit: 9999});
     },
     render() {
-        var options = [{id: '', name: 'Nothing'}].concat(this.state.repositories.items || []);
+        var options = [{id: '', name: 'Nothing'}].concat(this.state.repositories.items || []);
         return React.createElement(Input, React.__spread({}, this.props, {
                 type: 'select',
                 ref: 'input',
                 key: 'input'
             }),
             _.map(options, function(repository) {
-                console.log(repository);
                 return (<option value={repository.id} key={repository.id}>{repository.name}</option>);
             })
         );
@@ -129,24 +127,41 @@ var JobForm = React.createClass({
                 {error}
 
                 <Input type="text" label="Name" labelClassName="col-sm-2" wrapperClassName="col-sm-10"
-                       valueLink={this.linkState('name')} bsStyle={bsStyle.name}/>
+                    valueLink={this.linkState('name')} bsStyle={bsStyle.name}/>
                 <Input type="textarea" label="Description" labelClassName="col-sm-2" wrapperClassName="col-sm-10"
-                       valueLink={this.linkState('description')} bsStyle={bsStyle.description}/>
+                    valueLink={this.linkState('description')} bsStyle={bsStyle.description}/>
 
                 <SelectRepository label="Repository" labelClassName="col-sm-2" wrapperClassName="col-sm-10"
-                               valueLink={this.linkState('repositoryId')} bsStyle={bsStyle.repositoryId}/>
+                    valueLink={this.linkState('repositoryId')} bsStyle={bsStyle.repositoryId}/>
                 <SelectPlaybook label="Playbook" labelClassName="col-sm-2" wrapperClassName="col-sm-10"
-                                ref="selectPlaybook" repository={repositoryId} valueLink={this.linkState('playbook')}
-                                bsStyle={bsStyle.playbook}/>
+                    ref="selectPlaybook" repository={repositoryId} valueLink={this.linkState('playbook')}
+                    bsStyle={bsStyle.playbook}/>
+
+                <Input type="select" label="Task type" labelClassName="col-sm-2" wrapperClassName="col-sm-10"
+                    valueLink={this.linkState('runType')} bsStyle={bsStyle.runType}>
+                    <option value="normal">normal</option>
+                    <option value="check">check</option>
+                </Input>
+
                 <SelectCredential label="Credential" labelClassName="col-sm-2" wrapperClassName="col-sm-10"
                     valueLink={this.linkState('credentialId')} bsStyle={bsStyle.credentialId}/>
 
+                <Input type="text" label="Limit" labelClassName="col-sm-2" wrapperClassName="col-sm-10"
+                    valueLink={this.linkState('hostLimit')} bsStyle={bsStyle.hostLimit}/>
+
+                <Input type="text" label="Forks" defaultValue={0} labelClassName="col-sm-2" wrapperClassName="col-sm-10"
+                    valueLink={this.linkState('forks')} bsStyle={bsStyle.forks}/>
+
                 <Input type="select" label="Verbosity" labelClassName="col-sm-2" wrapperClassName="col-sm-10"
-                       valueLink={this.linkState('verbosity')} bsStyle={bsStyle.verbosity}>
+                    valueLink={this.linkState('verbosity')} bsStyle={bsStyle.verbosity}>
                     <option value="default">Default</option>
                     <option value="verbose">Verbose</option>
                     <option value="debug">Debug</option>
                 </Input>
+
+
+                <Input type="textarea" label="Variables" labelClassName="col-sm-2" wrapperClassName="col-sm-10"
+                    valueLink={this.linkState('extraVars')} bsStyle={bsStyle.extraVars}/>
 
                 <Input type="submit" value="Save" wrapperClassName="col-sm-offset-2 col-sm-10"/>
             </form>

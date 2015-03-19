@@ -64,7 +64,7 @@ module.exports = React.createClass({
                     <Button bsStyle="primary" onClick={this.createInventory} className="pull-right">Create new inventory</Button>
                 </PageHeader>
 
-                <InventoryList />
+                <InventoryList sort="+name" />
             </div>
         );
     }

@@ -1,10 +1,8 @@
 var Reflux = require('reflux');
 var reqwest = require('reqwest');
 var _ = require('lodash');
-var Actions = require('../actions/taskActions');
+var Actions = require('../actions/hostActions');
 var xResultCount = require('x-result-count');
-var utils = require('../utils/utils');
-var yaml = require('js-yaml/dist/js-yaml.min');
 
 var Stores = module.exports = {};
 
@@ -13,15 +11,11 @@ Stores.List = Reflux.createStore({
         this.listenTo(Actions.list, this.list);
     },
 
-    list(options) {
-        var params = utils.prepareParams(options);
-
+    list() {
         var request = reqwest({
-            url: '/api/task',
-            type: 'json',
-            data: params || {}
+            url: '/api/host',
+            type: 'json'
         });
-
         request.then(_.partialRight(this.onSuccess, request), this.onError);
     },
 
@@ -68,13 +62,12 @@ Stores.Get = Reflux.createStore({
 
     get(id) {
         reqwest({
-            url: '/api/task/' + id,
+            url: '/api/host/' + id,
             type: 'json'
         }).then(this.onSuccess, this.onError);
     },
 
     onSuccess: function(item) {
-        item.extraVars = item.extraVars ? yaml.dump(item.extraVars) : null;
         this.update(item);
         Actions.get.completed(item);
     },

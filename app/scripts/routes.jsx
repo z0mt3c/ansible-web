@@ -13,6 +13,7 @@ var RepositoryApp = require('./apps/repository');
 var UserApp = require('./apps/user');
 var RunApp = require('./apps/run');
 var InventoryApp = require('./apps/inventory');
+var HostApp = require('./apps/host');
 var TaskApp = require('./apps/task');
 
 var routes = module.exports = (
@@ -41,6 +42,12 @@ var routes = module.exports = (
             <DefaultRoute handler={InventoryApp.List} />
             <Route name="inventory_create" handler={InventoryApp.Edit} path="new" />
             <Route name="inventory_edit" handler={InventoryApp.Edit} path=":id" />
+        </Route>
+
+        <Route name="host_list" path="/hosts">
+            <DefaultRoute handler={HostApp.List} />
+            <Route name="host_create" handler={HostApp.Edit} path="new" />
+            <Route name="host_edit" handler={HostApp.Edit} path=":id" />
         </Route>
 
         <Route name="user_list" path="/users">

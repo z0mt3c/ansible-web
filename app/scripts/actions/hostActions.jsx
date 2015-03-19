@@ -1,6 +1,6 @@
 var Reflux = require('reflux');
 var reqwest = require('reqwest');
-var rootResource = '/api/user';
+var rootResource = '/api/host';
 
 var Actions = Reflux.createActions(
     {
@@ -29,12 +29,12 @@ Actions.delete.listen(function(id) {
     }).then(this.completed, this.failed);
 });
 
-Actions.update.listen(function(item) {
+Actions.update.listen(function(project) {
     return reqwest({
         method: 'patch',
-        url: rootResource + '/' + item.id,
+        url: rootResource + '/' + project.id,
         type: 'json',
-        data: item
+        data: project
     }).then(this.completed, this.failed);
 });
 

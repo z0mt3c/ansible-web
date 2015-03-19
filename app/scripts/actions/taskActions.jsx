@@ -1,6 +1,24 @@
 var Reflux = require('reflux');
 var reqwest = require('reqwest');
 var rootResource = '/api/task';
+var _ = require('lodash');
+var yaml = require('js-yaml/dist/js-yaml.min');
+
+var internals = {
+    prepareItem: function(job) {
+        if (!_.isString(job.extraVars)) {
+            return job;
+        }
+
+        try {
+            job.extraVars = job.extraVars ? yaml.safeLoad(job.extraVars) : null;
+        } catch (e) {
+            job.extraVars = null;
+        }
+
+        return job;
+    }
+};
 
 var Actions = Reflux.createActions(
     {
@@ -14,6 +32,7 @@ var Actions = Reflux.createActions(
 );
 
 Actions.create.listen(function(job) {
+    internals.prepareItem(job);
     reqwest({
         method: 'post',
         url: rootResource,
@@ -31,6 +50,7 @@ Actions.delete.listen(function(id) {
 });
 
 Actions.update.listen(function(job) {
+    internals.prepareItem(job);
     return reqwest({
         method: 'put',
         url: rootResource + '/' + job.id,

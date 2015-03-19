@@ -83,7 +83,7 @@ module.exports = React.createClass({
                         repository</Button>
                 </PageHeader>
 
-                <RepositoryList />
+                <RepositoryList sort="+name" />
             </div>
         );
     }

@@ -5,10 +5,10 @@ var React = require('react/addons'),
     $ = require('jquery');
 
 var Reflux = require('reflux');
-var Actions = require('../../actions/userActions');
-var Stores = require('../../stores/userStores');
+var Actions = require('../../actions/hostActions');
+var Stores = require('../../stores/hostStores');
 
-var UserForm = React.createClass({
+var HostForm = React.createClass({
     mixins: [Router.State, Reflux.connect(Stores.Get), React.addons.LinkedStateMixin],
     componentDidMount() {
         var params = this.getParams();
@@ -52,24 +52,16 @@ var UserForm = React.createClass({
             }, bsStyle)
         }
 
+        var facts = JSON.stringify(this.state.facts || {}, null, '  ');
         return (
             <form className="form-horizontal" onSubmit={this.submit}>
                 {error}
 
-                <Input type="select" label="Active" labelClassName="col-sm-2" wrapperClassName="col-sm-10" valueLink={this.linkState('active')} bsStyle={bsStyle.active}>
-                    <option value="">Choose</option>
-                    <option value={true}>Yes</option>
-                    <option value={false}>No</option>
-                </Input>
-
                 <Input type="text" label="Name" labelClassName="col-sm-2" wrapperClassName="col-sm-10"
-                    valueLink={this.linkState('name')} bsStyle={bsStyle.name}/>
-                <Input type="text" label="Email" labelClassName="col-sm-2" wrapperClassName="col-sm-10"
-                    valueLink={this.linkState('email')} bsStyle={bsStyle.email}/>
-                <Input type="password" label="Password" labelClassName="col-sm-2" wrapperClassName="col-sm-10"
-                    valueLink={this.linkState('password')} bsStyle={bsStyle.password}/>
-
+                       valueLink={this.linkState('name')} bsStyle={bsStyle.name}/>
                 <Input type="submit" value="Save" wrapperClassName="col-sm-offset-2 col-sm-10"/>
+
+                <pre>{facts}</pre>
             </form>
         );
     }
@@ -80,18 +72,18 @@ module.exports = React.createClass({
     componentDidMount() {
     },
     save() {
-        this.transitionTo('user_list');
+        this.transitionTo('host_list');
     },
     render() {
         var params = this.getParams();
 
         return (
             <div className="page-main">
-                <PageHeader>{params.id ? 'Edit user' : 'Create user'}
+                <PageHeader>{params.id ? 'Edit host' : 'Create host'}
                     <small></small>
                 </PageHeader>
 
-                <UserForm id={params.id} onSave={this.save}/>
+                <HostForm id={params.id} onSave={this.save}/>
             </div>
         );
     }

@@ -66,7 +66,7 @@ module.exports = React.createClass({
                     <Button bsStyle="primary" onClick={this.createUser} className="pull-right">Create new user</Button>
                 </PageHeader>
 
-                <UserList />
+                <UserList sort="+name" />
             </div>
         );
     }

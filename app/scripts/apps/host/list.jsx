@@ -6,15 +6,14 @@ var React = require('react/addons'),
     ListMixin = require('../../mixins/list');
 
 var Reflux = require('reflux');
-var Actions = require('../../actions/credentialActions');
-var Stores = require('../../stores/credentialStores');
+var Actions = require('../../actions/hostActions');
+var Stores = require('../../stores/hostStores');
 
-var CredentialList = React.createClass({
+var HostList = React.createClass({
     mixins: [Router.Navigation, Reflux.connect(Stores.List, 'list'), ListMixin],
     listAction: Actions.list,
     columns: [
         {field: 'name', title: 'Name', filter: true, sort: true},
-        {field: 'description', title: 'Description', filter: true, sort: true},
         {field: 'actions', title: 'Actions', filter: false, sort: false, hide: true, className: 'actions'}
     ],
     propTypes: {
@@ -28,7 +27,6 @@ var CredentialList = React.createClass({
     renderRow(item) {
         return (<tr onClick={this._click.bind(null, item)} key={item.id}>
             <td>{item.name}</td>
-            <td>{item.description}</td>
             <td className="actions">
                 {this._renderEdit(item)}
                 {' '}
@@ -38,7 +36,7 @@ var CredentialList = React.createClass({
     },
     edit(obj, e) {
         e.preventDefault();
-        this.transitionTo('credential_edit', {id: obj.id});
+        this.transitionTo('host_edit', {id: obj.id});
     },
     delete(obj, e) {
         e.preventDefault();
@@ -55,18 +53,18 @@ module.exports = React.createClass({
     mixins: [Router.Navigation],
     componentDidMount() {
     },
-    createCredential() {
-        this.transitionTo('credential_create');
+    createHost() {
+        this.transitionTo('host_create');
     },
     render() {
         return (
             <div className="page-main">
-                <PageHeader>Credentials
-                    <small> Manage your host credentials</small>
-                    <Button bsStyle="primary" onClick={this.createCredential} className="pull-right">Create new credential</Button>
+                <PageHeader>Hosts
+                    <small> Manage your hosts</small>
+                    <Button bsStyle="primary" onClick={this.createHost} className="pull-right">Create new host</Button>
                 </PageHeader>
 
-                <CredentialList sort="+name"/>
+                <HostList sort="+name" />
             </div>
         );
     }
