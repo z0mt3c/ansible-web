@@ -14,6 +14,7 @@ var HostList = React.createClass({
     listAction: Actions.list,
     columns: [
         {field: 'name', title: 'Name', filter: true, sort: true},
+        {field: 'factsUpdated', title: 'Facts updated', filter: true, sort: true},
         {field: 'actions', title: 'Actions', filter: false, sort: false, hide: true, className: 'actions'}
     ],
     propTypes: {
@@ -27,6 +28,7 @@ var HostList = React.createClass({
     renderRow(item) {
         return (<tr onClick={this._click.bind(null, item)} key={item.id}>
             <td>{item.name}</td>
+            <td>{item.factsUpdated}</td>
             <td className="actions">
                 {this._renderEdit(item)}
                 {' '}
