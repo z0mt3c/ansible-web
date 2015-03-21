@@ -1,8 +1,6 @@
 var React = require('react/addons'),
     Router = require('react-router'),
-    { Button, ButtonGroup, Table, PageHeader } = require('react-bootstrap'),
-    _ = require('lodash'),
-    Icon = require('react-fa/dist/Icon'),
+    { Button, PageHeader } = require('react-bootstrap'),
     ListMixin = require('../../mixins/list');
 
 var Reflux = require('reflux');
@@ -11,7 +9,7 @@ var Stores = require('../../stores/hostStores');
 
 var HostList = React.createClass({
     mixins: [Router.Navigation, Reflux.connect(Stores.List, 'list'), ListMixin],
-    listAction: Actions.list,
+    getListAction() { return Actions.list; },
     columns: [
         {field: 'name', title: 'Name', filter: true, sort: true},
         {field: 'factsUpdated', title: 'Facts updated', filter: true, sort: true},

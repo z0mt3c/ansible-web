@@ -1,8 +1,7 @@
 var React = require('react/addons'),
     Router = require('react-router'),
     { Alert, Input, PageHeader } = require('react-bootstrap'),
-    _ = require('lodash'),
-    $ = require('jquery');
+    _ = require('lodash');
 
 var Reflux = require('reflux');
 var Actions = require('../../actions/inventoryActions');
@@ -49,7 +48,7 @@ var InventoryForm = React.createClass({
             _.reduce(state._error.validation.keys, function(memo, key) {
                 memo[key] = 'error';
                 return memo;
-            }, bsStyle)
+            }, bsStyle);
         }
 
         return (
@@ -58,6 +57,13 @@ var InventoryForm = React.createClass({
 
                 <Input type="text" label="Name" labelClassName="col-sm-2" wrapperClassName="col-sm-10"
                        valueLink={this.linkState('name')} bsStyle={bsStyle.name}/>
+
+                <div className="col-sm-offset-2 col-sm-5">
+                    asdf
+                </div>
+                <div className="col-sm-5">
+                    asdf
+                </div>
 
                 <Input type="submit" value="Save" wrapperClassName="col-sm-offset-2 col-sm-10"/>
             </form>

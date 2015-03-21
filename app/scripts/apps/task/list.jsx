@@ -1,10 +1,8 @@
 var React = require('react/addons'),
     Router = require('react-router'),
-    { Button, ButtonGroup, Table, PageHeader } = require('react-bootstrap'),
-    _ = require('lodash'),
+    { Button, PageHeader } = require('react-bootstrap'),
     ListMixin = require('../../mixins/list'),
-    Icon = require('react-fa/dist/Icon'),
-    $ = require('jquery');
+    Icon = require('react-fa/dist/Icon');
 
 var Reflux = require('reflux');
 var Actions = require('../../actions/taskActions');
@@ -12,7 +10,7 @@ var Stores = require('../../stores/taskStores');
 
 var TaskList = React.createClass({
     mixins: [Router.Navigation, Reflux.connect(Stores.List, 'list'), ListMixin],
-    listAction: Actions.list,
+    getListAction() { return Actions.list; },
     columns: [
         {field: 'name', title: 'Name', filter: true, sort: true},
         {field: 'type', title: 'Type', filter: true, sort: true},

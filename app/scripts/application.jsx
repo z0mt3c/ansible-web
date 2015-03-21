@@ -16,7 +16,7 @@ var pageItems = [
     {text: 'Runs', to: 'run_list'}
 ];
 
-var Layout = module.exports = React.createClass({
+module.exports = React.createClass({
     mixins: [Router.Navigation, Router.State],
 
     render: function() {

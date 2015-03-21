@@ -1,8 +1,7 @@
 var React = require('react/addons'),
     Router = require('react-router'),
-    { TabbedArea, TabPane, Table, Alert, Input, PageHeader, Panel, ListGroup, ListGroupItem, Label } = require('react-bootstrap'),
-    _ = require('lodash'),
-    $ = require('jquery');
+    { TabbedArea, TabPane, Table, PageHeader, ListGroup, ListGroupItem, Label } = require('react-bootstrap'),
+    _ = require('lodash');
 
 var Reflux = require('reflux');
 var Actions = require('../../actions/runActions');
@@ -161,17 +160,17 @@ module.exports = React.createClass({
 
         var list = _.map(result, function(item, i) {
             if (item.task === 'playbook_on_task_start') {
-                return <PlaybookTask key={i} item={item}/>
+                return <PlaybookTask key={i} item={item}/>;
             } else if (item.task === 'playbook_on_setup') {
-                return <PlaybookGathering key={i} item={item}/>
+                return <PlaybookGathering key={i} item={item}/>;
             } else if (item.task === 'playbook_on_stats') {
-                return <PlaybookStats key={i} item={item}/>
+                return <PlaybookStats key={i} item={item}/>;
             } else {
                 return null;
                 //return <div>? {item.task}</div>;
             }
         });
 
-        return (<ListGroup>{list}</ListGroup>)
+        return (<ListGroup>{list}</ListGroup>);
     }
 });

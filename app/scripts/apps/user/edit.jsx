@@ -1,8 +1,7 @@
 var React = require('react/addons'),
     Router = require('react-router'),
     { Alert, Input, PageHeader } = require('react-bootstrap'),
-    _ = require('lodash'),
-    $ = require('jquery');
+    _ = require('lodash');
 
 var Reflux = require('reflux');
 var Actions = require('../../actions/userActions');
@@ -49,7 +48,7 @@ var UserForm = React.createClass({
             _.reduce(state._error.validation.keys, function(memo, key) {
                 memo[key] = 'error';
                 return memo;
-            }, bsStyle)
+            }, bsStyle);
         }
 
         return (

@@ -33,6 +33,9 @@ module.exports = {
     clean: {
         dest: dest
     },
+    lint: {
+        src: 'app/scripts/**'
+    },
     browserify: {
         bundleConfigs: [
             {

@@ -1,7 +1,7 @@
 var React = require('react'),
     Router = require('react-router'),
-    { PageHeader } = require('react-bootstrap'),
-    Link = Router.Link;
+    { PageHeader } = require('react-bootstrap');
+//    Link = Router.Link;
 
 module.exports = React.createClass({
     mixins: [Router.Navigation],

@@ -1,6 +1,5 @@
 var React = require('react'),
-    {Button, Pager, PageItem} = require('react-bootstrap'),
-    _ = require('lodash');
+    { Pager, PageItem} = require('react-bootstrap');
 
 module.exports = React.createClass({
     propTypes: {

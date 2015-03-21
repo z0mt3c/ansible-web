@@ -1,4 +1,4 @@
-var Filter, STYLES, defaults, entities, extend, j, results, toHexString,
+var Filter, STYLES, defaults, extend, j, results, toHexString,
     slice = [].slice;
 
 STYLES = {
@@ -63,7 +63,8 @@ toHexString = function(num) {
                 return results;
             })()).join('');
             STYLES['ef' + c] = 'color:#' + rgb;
-            return STYLES['eb' + c] = 'background-color:#' + rgb;
+            var result = STYLES['eb' + c] = 'background-color:#' + rgb;
+            return result;
         });
     });
 });
@@ -79,12 +80,15 @@ toHexString = function(num) {
         c = gray + 232;
         l = toHexString(gray * 10 + 8);
         STYLES['ef' + c] = 'color:#' + l + l + l;
-        return STYLES['eb' + c] = 'background-color:#' + l + l + l;
+        var result = STYLES['eb' + c] = 'background-color:#' + l + l + l;
+        return result;
     });
 
 extend = function() {
-    var dest, k, len, o, obj, objs, v;
-    dest = arguments[0], objs = 2 <= arguments.length ? slice.call(arguments, 1) : [];
+    var k, len, o, obj,  v;
+    var dest = arguments[0];
+    var objs = 2 <= arguments.length ? slice.call(arguments, 1) : [];
+
     for (o = 0, len = objs.length; o < len; o++) {
         obj = objs[o];
         for (k in obj) {
@@ -105,7 +109,7 @@ defaults = {
 
 Filter = (function() {
     function Filter(options) {
-        if (options == null) {
+        if (options === null) {
             options = {};
         }
         this.opts = extend({}, defaults, options);
@@ -257,7 +261,7 @@ Filter = (function() {
     };
 
     Filter.prototype.pushTag = function(tag, style) {
-        if (style == null) {
+        if (style === null) {
             style = '';
         }
         if (style.length && style.indexOf(':') === -1) {
@@ -285,14 +289,15 @@ Filter = (function() {
         if (this.stack.slice(-1)[0] === style) {
             last = this.stack.pop();
         }
-        if (last != null) {
+        if (last !== null) {
             return '</' + style + '>';
         }
     };
 
     Filter.prototype.resetStyles = function() {
-        var ref, stack;
-        ref = [this.stack, []], stack = ref[0], this.stack = ref[1];
+        var ref = [this.stack, []];
+        var stack = ref[0];
+        this.stack = ref[1];
         return stack.reverse().map(function(tag) {
             return '</' + tag + '>';
         }).join('');
@@ -302,7 +307,7 @@ Filter = (function() {
         var ansiHandler, ansiMatch, ansiMess, handler, i, len, length, newline, o, process, realText, remove, removeXterm256, results1, tokens;
         ansiMatch = false;
         ansiHandler = 3;
-        remove = function(m) {
+        remove = function() {
             return '';
         };
         removeXterm256 = function(m, g1) {
@@ -361,17 +366,13 @@ Filter = (function() {
             }
         ];
         process = function(handler, i) {
-            var matches;
             if (i > ansiHandler && ansiMatch) {
                 return;
             } else {
                 ansiMatch = false;
             }
-            matches = text.match(handler.pattern);
-            text = text.replace(handler.pattern, handler.sub);
-            if (matches == null) {
 
-            }
+            text = text.replace(handler.pattern, handler.sub);
         };
         results1 = [];
         while ((length = text.length) > 0) {

@@ -12,6 +12,6 @@ injectTapEventPlugin();
 
 // Render the main app react component into the document body.
 // https://facebook.github.io/react/docs/top-level-api.html#react.render
-Router.run(Routes, function(Handler, state) {
+Router.run(Routes, function(Handler) {
     React.render(<Handler />, document.getElementById('universe'));
 });

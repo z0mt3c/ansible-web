@@ -7,10 +7,10 @@ module.exports = {
 
         _.each(params, function(value, key) {
             if (value === null || value === undefined || value === '') {
-                delete params[key]
+                delete params[key];
             }
         });
 
-        return params
+        return params;
     }
-}
+};

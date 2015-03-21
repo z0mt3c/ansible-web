@@ -1,8 +1,7 @@
 var React = require('react/addons'),
     Router = require('react-router'),
-    { Alert, Input, InputGroup, PageHeader, Row, Col, Button } = require('react-bootstrap'),
-    _ = require('lodash'),
-    $ = require('jquery');
+    { Alert, Input, PageHeader } = require('react-bootstrap'),
+    _ = require('lodash');
 
 var Reflux = require('reflux');
 var Actions = require('../../actions/taskActions');
@@ -118,7 +117,7 @@ var JobForm = React.createClass({
             _.reduce(state._error.validation.keys, function(memo, key) {
                 memo[key] = 'error';
                 return memo;
-            }, bsStyle)
+            }, bsStyle);
         }
 
         var repositoryId = this.state.repositoryId;

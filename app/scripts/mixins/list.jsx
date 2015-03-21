@@ -1,17 +1,28 @@
 var _ = require('lodash');
-var { Button, Table, PageHeader, Input, ModalTrigger } = require('react-bootstrap');
+var { Table, Button, ModalTrigger } = require('react-bootstrap');
 var Icon = require('react-fa/dist/Icon');
 var ModalDelete = require('../components/modal-delete');
 var Paging = require('../components/paging');
 var Sortable = require('../components/sortable');
+var React = require('react');
 
 module.exports = {
     load(params) {
-        this.listAction(params || this.state.params);
-
         if (params) {
-            this.setState({params: params});
+            this.setState({loading: true, params: params});
+        } else {
+            this.setState({loading: true});
         }
+
+        this.getListAction().triggerPromise(params || this.state.params).then(this.loadSuccess, this.loadFailed);
+    },
+
+    loadSuccess() {
+        this.setState({loading: false});
+    },
+
+    loadFailed() {
+        this.setState({loading: false});
     },
 
     changeSort(sort) {
@@ -63,7 +74,7 @@ module.exports = {
     _renderRow(item) {
         return (<tr onClick={this.clickItem.bind(null, item)} key={item.id}>
             <td>{item.id}</td>
-        </tr>)
+        </tr>);
     },
     renderRows() {
         return _.map(this.getItems(), this.renderRow || this._renderRow);
@@ -77,13 +88,13 @@ module.exports = {
             </th>;
         }
         if (column.hide === true) {
-            return <th key={i} className={column.className}></th>
+            return <th key={i} className={column.className}></th>;
         } else {
-            return <th key={i} className={column.className}>{column.title}</th>
+            return <th key={i} className={column.className}>{column.title}</th>;
         }
     },
 
-    renderHeaders(item, i) {
+    renderHeaders() {
         return _.map(this.columns, this.renderHeader || this._renderHeader);
     },
 
@@ -92,7 +103,7 @@ module.exports = {
             return <p>
                 Showing {this.state.list.paging.skip} {' to '} {this.state.list.paging.skip + this.state.list.paging.count}
                 {' of '} {this.state.list.paging.total} total
-                records.</p>
+                records.</p>;
         } else {
             return null;
         }
@@ -120,6 +131,10 @@ module.exports = {
 
     _render() {
         //<RunFilter onChange={this.changeFilter} />
+        if (this.state.loading) {
+            return <div>Loading...</div>;
+        }
+
         return (
             <div>
                 {this.renderInfo()}
@@ -137,6 +152,7 @@ module.exports = {
 
     getDefaultProps() {
         return {
+            loading: true,
             limit: 10,
             skip: 0,
             sort: '-id'

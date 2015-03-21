@@ -16,7 +16,7 @@ var InventoryApp = require('./apps/inventory');
 var HostApp = require('./apps/host');
 var TaskApp = require('./apps/task');
 
-var routes = module.exports = (
+module.exports = (
     <Route name="root" handler={App} path="/" ignoreScrollBehavior>
         <DefaultRoute handler={DashboardApp.List} />
         <Route name="dashboard" handler={DashboardApp.List} path="/" />
