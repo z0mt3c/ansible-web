@@ -181,7 +181,7 @@ var InventoryGroups = React.createClass({
     },
     render() {
         return <div className="col-sm-10">
-            <PanelGroup defaultActiveKey={0} ref="panelGroup" accordion>
+            <PanelGroup ref="panelGroup" accordion>
                 {_.map(this.state.groups, this.renderGroup)}
             </PanelGroup>
 
