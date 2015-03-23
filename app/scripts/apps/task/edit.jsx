@@ -8,6 +8,8 @@ var Actions = require('../../actions/taskActions');
 var Stores = require('../../stores/taskStores');
 var RepositoryActions = require('../../actions/repositoryActions');
 var RepositoryStores = require('../../stores/repositoryStores');
+var InventoryActions = require('../../actions/inventoryActions');
+var InventoryStores = require('../../stores/inventoryStores');
 var CredentialActions = require('../../actions/credentialActions');
 var CredentialStores = require('../../stores/credentialStores');
 
@@ -44,6 +46,25 @@ var SelectRepository = React.createClass({
             }),
             _.map(options, function(repository) {
                 return (<option value={repository.id} key={repository.id}>{repository.name}</option>);
+            })
+        );
+    }
+});
+
+var SelectInventory = React.createClass({
+    mixins: [Reflux.connect(InventoryStores.List, 'inventories')],
+    componentDidMount() {
+        InventoryActions.list({limit: 9999});
+    },
+    render() {
+        var options = [{id: '', name: 'Nothing'}].concat(this.state.inventories.items || []);
+        return React.createElement(Input, React.__spread({}, this.props, {
+                type: 'select',
+                ref: 'input',
+                key: 'input'
+            }),
+            _.map(options, function(inventory) {
+                return (<option value={inventory.id} key={inventory.id}>{inventory.name}</option>);
             })
         );
     }
@@ -141,6 +162,9 @@ var JobForm = React.createClass({
                     <option value="normal">normal</option>
                     <option value="check">check</option>
                 </Input>
+
+                <SelectInventory label="Inventory" labelClassName="col-sm-2" wrapperClassName="col-sm-10"
+                    valueLink={this.linkState('inventoryId')} bsStyle={bsStyle.inventoryId}/>
 
                 <SelectCredential label="Credential" labelClassName="col-sm-2" wrapperClassName="col-sm-10"
                     valueLink={this.linkState('credentialId')} bsStyle={bsStyle.credentialId}/>
