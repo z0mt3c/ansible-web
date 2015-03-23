@@ -4,7 +4,6 @@ var _ = require('lodash');
 var Actions = require('../actions/taskActions');
 var xResultCount = require('x-result-count');
 var utils = require('../utils/utils');
-var yaml = require('js-yaml/dist/js-yaml.min');
 
 var Stores = module.exports = {};
 
@@ -74,7 +73,6 @@ Stores.Get = Reflux.createStore({
     },
 
     onSuccess: function(item) {
-        item.extraVars = item.extraVars ? yaml.dump(item.extraVars) : null;
         this.update(item);
         Actions.get.completed(item);
     },

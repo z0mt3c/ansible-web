@@ -5,6 +5,7 @@ var React = require('react/addons'),
 
 var Reflux = require('reflux');
 var Actions = require('../../actions/taskActions');
+var VarEditor = require('../../components/var-editor');
 var Stores = require('../../stores/taskStores');
 var RepositoryActions = require('../../actions/repositoryActions');
 var RepositoryStores = require('../../stores/repositoryStores');
@@ -182,9 +183,8 @@ var JobForm = React.createClass({
                     <option value="debug">Debug</option>
                 </Input>
 
-
-                <Input type="textarea" label="Variables" labelClassName="col-sm-2" wrapperClassName="col-sm-10"
-                    valueLink={this.linkState('extraVars')} bsStyle={bsStyle.extraVars}/>
+                <VarEditor label="Variables" labelClassName="col-sm-2" wrapperClassName="col-sm-10"
+                    valueLink={this.linkState('extraVars')} bsStyle={bsStyle.extraVars} />
 
                 <Input type="submit" value="Save" wrapperClassName="col-sm-offset-2 col-sm-10"/>
             </form>

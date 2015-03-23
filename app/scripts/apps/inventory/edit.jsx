@@ -7,17 +7,28 @@ var Icon = require('react-fa/dist/Icon');
 var Reflux = require('reflux');
 var Actions = require('../../actions/inventoryActions');
 var Stores = require('../../stores/inventoryStores');
+var VarEditor = require('../../components/var-editor');
 
 var InventoryGroup = React.createClass({
     mixins: [React.addons.LinkedStateMixin],
     getInitialState: function() {
-        return {group: this.props.group, _name: ''}
+        return {group: this.props.group, availableGroups: [], _groupName: '', _hostName: ''};
     },
     componentWillReceiveProps: function(newProps) {
-        this.setState({group: newProps.group});
+        this.setState({group: newProps.group, availableGroups: newProps.availableGroups});
+    },
+    removeHost(host) {
+        var group = this.state.group;
+        group.hosts = _.without(group.hosts, host);
+        this.onChanged(group);
+    },
+    removeChild(child) {
+        var group = this.state.group;
+        group.children = _.without(group.children, child);
+        this.onChanged(group);
     },
     addHost() {
-        var name = this.state._name.trim();
+        var name = this.state._hostName.trim();
         var group = this.state.group;
         group.hosts = group.hosts || [];
 
@@ -26,13 +37,18 @@ var InventoryGroup = React.createClass({
             this.onChanged(group);
         }
     },
-    removeHost(host) {
+    addGroup() {
+        var name = this.state._groupName.trim();
         var group = this.state.group;
-        group.hosts = _.without(group.hosts, host);
-        this.onChanged(group);
+        group.children = group.children || [];
+
+        if (name && !_.contains(group.children, name)) {
+            group.children.push(name);
+            this.onChanged(group);
+        }
     },
     onChanged(group) {
-        this.setState({group: group, _name: ''});
+        this.setState({group: group, _groupName: '', _hostName: ''});
         this.props.onChange(group);
     },
     renderHost(host, i) {
@@ -40,20 +56,61 @@ var InventoryGroup = React.createClass({
             <Button onClick={this.removeHost.bind(null, host)} bsSize="xsmall" className="pull-right">
                 <Icon name="remove"/>
             </Button>
-        </ListGroupItem>
+        </ListGroupItem>;
+    },
+    renderChildren(group, i) {
+        return <ListGroupItem key={group + i}>{group}
+            <Button onClick={this.removeChild.bind(null, group)} bsSize="xsmall" className="pull-right">
+                <Icon name="remove"/>
+            </Button>
+        </ListGroupItem>;
+    },
+    changeAttribute(key, data) {
+        var group = this.state.group;
+        group[key] = data;
+        this.setState({ group: group });
     },
     remove() {
         this.props.onRemove(this.state);
     },
     render() {
-        return <div>
-            <h5>Hosts</h5>
+        var groups = _.without(this.props.availableGroups, this.state.group.children, this.state.group.name);
+        var hostCount = this.state.group.hosts ? this.state.group.hosts.length : null;
+        var groupCount = this.state.group.children ? this.state.group.children.length : null;
 
-            <ListGroup>
+        return <div className="row">
+            <div className="col-md-12">
+                <h5>Group variables</h5>
+                <VarEditor wrapperClassName="col-sm-12" value={this.state.group.vars} onChange={this.changeAttribute.bind(null, 'vars')}/>
+            </div>
+            <div className="col-md-6">
+                <h5>Hosts{' '}
+                    <span className="badge">{hostCount}</span>
+                </h5>
+
+                <ListGroup>
                 {_.map(this.state.group.hosts, this.renderHost)}
-            </ListGroup>
+                </ListGroup>
 
-            <Input type="text" wrapperClassName="col-sm-12" placeholder="Hostname" valueLink={this.linkState('_name')} buttonAfter={<Button onClick={this.addHost}>Add host</Button>}/>
+                <Input type="text" wrapperClassName="col-sm-12" placeholder="Hostname" valueLink={this.linkState('_hostName')} buttonAfter={<Button bsStyle="primary" onClick={this.addHost}>ADD</Button>}/>
+            </div>
+            <div className="col-md-6">
+
+                <h5>Child groups{' '}
+                    <span className="badge">{groupCount}</span>
+                </h5>
+
+                <ListGroup>
+                {_.map(this.state.group.children, this.renderChildren)}
+                </ListGroup>
+
+                <Input type="select" wrapperClassName="col-sm-12" placeholder="Groupname" valueLink={this.linkState('_groupName')} buttonAfter={<Button bsStyle="primary" onClick={this.addGroup}>ADD</Button>}>
+                    <option value="">Select child group</option>
+                {_.map(groups, function(group) {
+                    return <option value={group}>{group}</option>;
+                })}
+                </Input>
+            </div>
         </div>;
     }
 });
@@ -61,7 +118,7 @@ var InventoryGroup = React.createClass({
 var InventoryGroups = React.createClass({
     mixins: [React.addons.LinkedStateMixin],
     getInitialState: function() {
-        return {groups: this.props.groups, _name: ''}
+        return {groups: this.props.groups, _name: ''};
     },
     componentWillReceiveProps: function(newProps) {
         this.setState({groups: newProps.groups});
@@ -82,14 +139,22 @@ var InventoryGroups = React.createClass({
         this.onChanged(groups);
     },
     renderGroup(group, i) {
-        var header = <span>{group.name}
+        var availableGroups = _.pluck(this.state.groups, 'name');
+        var header = <span>{group.name + ' '}
+            <span className="badge">{group.hosts.length}</span>
             <Button onClick={this.removeGroup.bind(null, group)} bsSize="xsmall" className="pull-right">
                 <Icon name="remove"/>
             </Button>
         </span>;
 
         return <Panel header={header} eventKey={i}>
-            <InventoryGroup group={group} key={group.name + i} onChange={this.onGroupChanged.bind(null, i)} onRemove={this.removeGroup.bind(null, group)} onSelect={this.changeActiveGroup.bind(null, i)}/>
+            <InventoryGroup
+                group={group}
+                key={group.name + i}
+                availableGroups={availableGroups}
+                onChange={this.onGroupChanged.bind(null, i)}
+                onRemove={this.removeGroup.bind(null, group)}
+                onSelect={this.changeActiveGroup.bind(null, i)}/>
         </Panel>;
     },
     addGroup() {
@@ -120,7 +185,7 @@ var InventoryGroups = React.createClass({
                 {_.map(this.state.groups, this.renderGroup)}
             </PanelGroup>
 
-            <Input type="text" wrapperClassName="col-sm-12" placeholder="Groupname" valueLink={this.linkState('_name')} buttonAfter={<Button onClick={this.addGroup}>Add group</Button>}/>
+            <Input type="text" wrapperClassName="col-sm-12" placeholder="Groupname" valueLink={this.linkState('_name')} buttonAfter={<Button bsStyle="primary" onClick={this.addGroup}>ADD</Button>}/>
         </div>;
     }
 });

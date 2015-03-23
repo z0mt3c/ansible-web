@@ -2,18 +2,11 @@ var Reflux = require('reflux');
 var reqwest = require('reqwest');
 var rootResource = '/api/task';
 var _ = require('lodash');
-var yaml = require('js-yaml/dist/js-yaml.min');
 
 var internals = {
     prepareItem: function(job) {
         if (!_.isString(job.extraVars)) {
             return job;
-        }
-
-        try {
-            job.extraVars = job.extraVars ? yaml.safeLoad(job.extraVars) : null;
-        } catch (e) {
-            job.extraVars = null;
         }
 
         return job;
