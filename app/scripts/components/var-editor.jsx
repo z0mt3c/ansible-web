@@ -4,7 +4,7 @@ var { Input } = require('react-bootstrap');
 
 module.exports = React.createClass({
     getInitialState() {
-        return {value: this.props.valueLink}
+        return {value: this.props.valueLink};
     },
 
     getValueLink: function(props) {
@@ -16,7 +16,7 @@ module.exports = React.createClass({
 
     componentWillReceiveProps: function(nextProps) {
         var valueLink = this.getValueLink(nextProps);
-        var value = yaml.dump(valueLink.value);
+        var value = valueLink.value ? yaml.dump(valueLink.value) : '';
         this.refs.input.getInputDOMNode().value = value;
     },
 
@@ -34,9 +34,9 @@ module.exports = React.createClass({
         try {
             var parsed = yaml.safeLoad(value);
             this.getValueLink(this.props).requestChange(parsed);
-            this.setState({ bsStyle: null, help: null })
+            this.setState({ bsStyle: null, help: null });
         } catch (e) {
-            this.setState({ bsStyle: 'error', help: e.message })
+            this.setState({ bsStyle: 'error', help: e.message });
         }
     },
 

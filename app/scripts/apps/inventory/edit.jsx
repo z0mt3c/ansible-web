@@ -2,7 +2,7 @@ var React = require('react/addons'),
     Router = require('react-router'),
     { Alert, Button, Input, PageHeader, ListGroupItem, ListGroup, Panel, PanelGroup } = require('react-bootstrap'),
     _ = require('lodash');
-var Icon = require('react-fa/dist/Icon');
+var Icon = require('../../components/icon');
 
 var Reflux = require('reflux');
 var Actions = require('../../actions/inventoryActions');
@@ -244,6 +244,9 @@ var InventoryForm = React.createClass({
 
                 <Input type="text" label="Name" labelClassName="col-sm-2" wrapperClassName="col-sm-10"
                     valueLink={this.linkState('name')} bsStyle={bsStyle.name}/>
+
+                <Input type="textarea" label="Description" labelClassName="col-sm-2" wrapperClassName="col-sm-10"
+                    valueLink={this.linkState('description')} bsStyle={bsStyle.description}/>
 
                 <div className="row">
                     <label className="control-label col-sm-2">

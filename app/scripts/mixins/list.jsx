@@ -1,6 +1,6 @@
 var _ = require('lodash');
 var { Table, Button, ModalTrigger } = require('react-bootstrap');
-var Icon = require('react-fa/dist/Icon');
+var Icon = require('../components/icon');
 var ModalDelete = require('../components/modal-delete');
 var Paging = require('../components/paging');
 var Sortable = require('../components/sortable');

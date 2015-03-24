@@ -21,7 +21,7 @@
     "gulp-filesize": "0.0.6",
     "gulp-jshint": "^1.9.4",
     "gulp-less": "^3.0.1",
-    "gulp-minify-css": "^0.5.1",
+    "gulp-minify-css": "^1.0.0",
     "gulp-notify": "^2.2.0",
     "gulp-react": "^3.0.1",
     "gulp-uglify": "^1.1.0",
@@ -31,14 +31,13 @@
     "jshint-stylish": "^1.0.1",
     "lodash": "^3.3.1",
     "pretty-hrtime": "^1.0.0",
-    "react": "^0.12.2",
-    "react-fa": "^3.0.0",
+    "react-bootstrap": "^0.17.0",
     "react-intl": "^1.1.0",
-    "react-router": "^0.12.4",
-    "react-tap-event-plugin": "^0.1.4",
+    "react-router": "^0.13.0",
+    "react-tap-event-plugin": "https://github.com/alessandro-pezzato/react-tap-event-plugin/archive/0fccf0e188375decf3debacdffd214723a7001f4.tar.gz",
     "reactify": "^1.0.0",
     "reflux": "^0.2.5",
-    "require-dir": "^0.1.0",
+    "require-dir": "^0.2.0",
     "reqwest": "^1.1.5",
     "socket.io-client": "^1.3.5",
     "vinyl-source-stream": "^1.0.0",
@@ -46,7 +45,6 @@
     "x-result-count": "^1.0.0"
   },
   "dependencies": {
-    "react": "^0.12.2",
-    "react-bootstrap": "^0.16.0"
+    "react": "^0.13.0"
   }
 }

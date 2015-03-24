@@ -2,7 +2,7 @@ var React = require('react/addons'),
     Router = require('react-router'),
     { Button, PageHeader } = require('react-bootstrap'),
     ListMixin = require('../../mixins/list'),
-    Icon = require('react-fa/dist/Icon');
+    Icon = require('../../components/icon');
 
 var Reflux = require('reflux');
 var Actions = require('../../actions/taskActions');

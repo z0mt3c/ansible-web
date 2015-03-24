@@ -1,5 +1,5 @@
 var React = require('react'),
-    Icon = require('react-fa/dist/Icon');
+    Icon = require('../components/icon');
 
 module.exports = React.createClass({
     propTypes: {
