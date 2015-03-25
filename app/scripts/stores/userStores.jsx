@@ -18,7 +18,7 @@ Stores.List = Reflux.createStore({
         var request = reqwest({
             url: '/api/user',
             type: 'json',
-            data: params || {}
+            data: params || {}
         });
 
         request.then(_.partialRight(this.onSuccess, request), this.onError);

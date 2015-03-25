@@ -18,7 +18,7 @@ Stores.List = Reflux.createStore({
         var request = reqwest({
             url: '/api/run',
             type: 'json',
-            data: params || {}
+            data: params || {}
         });
 
         request.then(_.partialRight(this.onSuccess, request), this.onError);
@@ -83,10 +83,10 @@ Stores.Get = Reflux.createStore({
         var item = this.item;
         var update = data ? data.update : null;
 
-        if (item && item.id === data.id && (update.$push || update.$set)) {
+        if (item && item.id === data.id && (update.$push || update.$set)) {
             item = _.reduce(update.$push, function(memo, value, key) {
                 var target = memo[key] = _.isArray(memo[key]) ? memo[key] : [];
-                if (!_.contains(target, value))  {
+                if (!_.contains(target, value)) {
                     target.push(value);
                 }
                 return memo;

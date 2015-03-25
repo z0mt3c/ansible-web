@@ -8,8 +8,10 @@ var Actions = require('../../actions/userActions');
 var Stores = require('../../stores/userStores');
 
 var UserList = React.createClass({
-    mixins: [Router.Navigation, Reflux.connect(Stores.List, 'list'), ListMixin],
-    getListAction() { return Actions.list; },
+    contextTypes: {router: React.PropTypes.func}, mixins: [Reflux.connect(Stores.List, 'list'), ListMixin],
+    getListAction() {
+        return Actions.list;
+    },
     columns: [
         {field: 'name', title: 'Name', filter: true, sort: true},
         {field: 'email', title: 'Email', filter: true, sort: true},
@@ -36,7 +38,7 @@ var UserList = React.createClass({
     },
     edit(obj, e) {
         e.preventDefault();
-        this.transitionTo('user_edit', {id: obj.id});
+        this.context.router.transitionTo('user_edit', {id: obj.id});
     },
     delete(obj, e) {
         e.preventDefault();
@@ -50,11 +52,11 @@ var UserList = React.createClass({
 });
 
 module.exports = React.createClass({
-    mixins: [Router.Navigation],
+    contextTypes: {router: React.PropTypes.func},
     componentDidMount() {
     },
     createUser() {
-        this.transitionTo('user_create');
+        this.context.router.transitionTo('user_create');
     },
     render() {
         return (

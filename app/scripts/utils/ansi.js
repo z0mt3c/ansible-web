@@ -85,7 +85,7 @@ toHexString = function(num) {
     });
 
 extend = function() {
-    var k, len, o, obj,  v;
+    var k, len, o, obj, v;
     var dest = arguments[0];
     var objs = 2 <= arguments.length ? slice.call(arguments, 1) : [];
 

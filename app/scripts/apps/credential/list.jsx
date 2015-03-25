@@ -8,8 +8,10 @@ var Actions = require('../../actions/credentialActions');
 var Stores = require('../../stores/credentialStores');
 
 var CredentialList = React.createClass({
-    mixins: [Router.Navigation, Reflux.connect(Stores.List, 'list'), ListMixin],
-    getListAction() { return Actions.list; },
+    contextTypes: {router: React.PropTypes.func}, mixins: [Reflux.connect(Stores.List, 'list'), ListMixin],
+    getListAction() {
+        return Actions.list;
+    },
     columns: [
         {field: 'name', title: 'Name', filter: true, sort: true},
         {field: 'description', title: 'Description', filter: true, sort: true},
@@ -36,7 +38,7 @@ var CredentialList = React.createClass({
     },
     edit(obj, e) {
         e.preventDefault();
-        this.transitionTo('credential_edit', {id: obj.id});
+        this.context.router.transitionTo('credential_edit', {id: obj.id});
     },
     delete(obj, e) {
         e.preventDefault();
@@ -50,11 +52,11 @@ var CredentialList = React.createClass({
 });
 
 module.exports = React.createClass({
-    mixins: [Router.Navigation],
+    contextTypes: {router: React.PropTypes.func},
     componentDidMount() {
     },
     createCredential() {
-        this.transitionTo('credential_create');
+        this.context.router.transitionTo('credential_create');
     },
     render() {
         return (

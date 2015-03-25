@@ -9,8 +9,10 @@ var Actions = require('../../actions/taskActions');
 var Stores = require('../../stores/taskStores');
 
 var TaskList = React.createClass({
-    mixins: [Router.Navigation, Reflux.connect(Stores.List, 'list'), ListMixin],
-    getListAction() { return Actions.list; },
+    contextTypes: {router: React.PropTypes.func}, mixins: [Reflux.connect(Stores.List, 'list'), ListMixin],
+    getListAction() {
+        return Actions.list;
+    },
     columns: [
         {field: 'name', title: 'Name', filter: true, sort: true},
         {field: 'type', title: 'Type', filter: true, sort: true},
@@ -29,7 +31,9 @@ var TaskList = React.createClass({
             <td>{item.name}</td>
             <td>{item.type}</td>
             <td className="actions">
-                <Button onClick={this.run.bind(null, item)} bsSize="small"><Icon name="rocket"/></Button>
+                <Button onClick={this.run.bind(null, item)} bsSize="small">
+                    <Icon name="rocket"/>
+                </Button>
                 {' '}
                 {this._renderEdit(item)}
                 {' '}
@@ -41,12 +45,12 @@ var TaskList = React.createClass({
         e.preventDefault();
         e.stopPropagation();
         Actions.run.triggerPromise(item.id).then(function(data) {
-            this.transitionTo('run_detail', {id: data.runId});
+            this.context.router.transitionTo('run_detail', {id: data.runId});
         }.bind(this));
     },
     edit(obj, e) {
         e.preventDefault();
-        this.transitionTo('task_edit', {id: obj.id});
+        this.context.router.transitionTo('task_edit', {id: obj.id});
     },
     delete(obj, e) {
         e.preventDefault();
@@ -59,7 +63,7 @@ var TaskList = React.createClass({
         e.preventDefault();
         e.stopPropagation();
         Actions.sync.triggerPromise(obj.id).then(function(data) {
-            this.transitionTo('run_detail', {id: data.runId});
+            this.context.router.transitionTo('run_detail', {id: data.runId});
         }.bind(this));
     },
     render() {
@@ -68,11 +72,11 @@ var TaskList = React.createClass({
 });
 
 module.exports = React.createClass({
-    mixins: [Router.Navigation],
+    contextTypes: {router: React.PropTypes.func},
     componentDidMount() {
     },
     createTask() {
-        this.transitionTo('task_create');
+        this.context.router.transitionTo('task_create');
     },
     render() {
         return (

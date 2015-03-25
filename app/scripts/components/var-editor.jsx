@@ -34,15 +34,15 @@ module.exports = React.createClass({
         try {
             var parsed = yaml.safeLoad(value);
             this.getValueLink(this.props).requestChange(parsed);
-            this.setState({ bsStyle: null, help: null });
+            this.setState({bsStyle: null, help: null});
         } catch (e) {
-            this.setState({ bsStyle: 'error', help: e.message });
+            this.setState({bsStyle: 'error', help: e.message});
         }
     },
 
     render: function() {
-        var style = this.state.bsStyle || this.props.bsStyle;
-        var help = this.state.help || this.props.help;
+        var style = this.state.bsStyle || this.props.bsStyle;
+        var help = this.state.help || this.props.help;
 
         return (
             <Input {...this.props}

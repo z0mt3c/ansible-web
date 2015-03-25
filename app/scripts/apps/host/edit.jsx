@@ -9,9 +9,12 @@ var Stores = require('../../stores/hostStores');
 var VarEditor = require('../../components/var-editor');
 
 var HostForm = React.createClass({
-    mixins: [Router.State, Reflux.connect(Stores.Get), React.addons.LinkedStateMixin],
+    mixins: [Reflux.connect(Stores.Get), React.addons.LinkedStateMixin],
+    contextTypes: {
+        router: React.PropTypes.func
+    },
     componentDidMount() {
-        var params = this.getParams();
+        var params = this.context.router.getCurrentParams();
 
         if (params.id) {
             Actions.get(params.id);
@@ -28,7 +31,7 @@ var HostForm = React.createClass({
     },
     submit(e) {
         e.preventDefault();
-        var params = this.getParams();
+        var params = this.context.router.getCurrentParams();
 
         if (params.id) {
             Actions.update.triggerPromise(this.state).then(this.completed, this.failed);
@@ -52,13 +55,13 @@ var HostForm = React.createClass({
             }, bsStyle);
         }
 
-        var facts = JSON.stringify(this.state.facts || {}, null, '  ');
+        var facts = JSON.stringify(this.state.facts || {}, null, '  ');
         return (
             <form className="form-horizontal" onSubmit={this.submit}>
                 {error}
 
                 <Input type="text" label="Name" labelClassName="col-sm-2" wrapperClassName="col-sm-10"
-                       valueLink={this.linkState('name')} bsStyle={bsStyle.name}/>
+                    valueLink={this.linkState('name')} bsStyle={bsStyle.name}/>
 
                 <VarEditor label="Variables" labelClassName="col-sm-2" wrapperClassName="col-sm-10" valueLink={this.linkState('vars')}/>
 
@@ -71,14 +74,14 @@ var HostForm = React.createClass({
 });
 
 module.exports = React.createClass({
-    mixins: [Router.Navigation, Router.State],
+    contextTypes: {router: React.PropTypes.func},
     componentDidMount() {
     },
     save() {
-        this.transitionTo('host_list');
+        this.context.router.transitionTo('host_list');
     },
     render() {
-        var params = this.getParams();
+        var params = this.context.router.getCurrentParams();
 
         return (
             <div className="page-main">

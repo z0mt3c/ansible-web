@@ -21,7 +21,9 @@ module.exports = React.createClass({
 
         if (sort.length === field.length + 1 && sort.indexOf(field) === 1) {
             var indicator = sort.substr(0, 1) === '-' ? 'sort-down' : 'sort-up';
-            return (<span onClick={onClick} className={className}>{this.props.children} <Icon name={indicator} /></span>);
+            return (<span onClick={onClick} className={className}>{this.props.children}
+                <Icon name={indicator} />
+            </span>);
         } else {
             return (<span onClick={onClick} className={className}>{this.props.children}</span>);
         }

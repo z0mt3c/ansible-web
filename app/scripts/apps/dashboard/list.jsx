@@ -4,11 +4,13 @@ var React = require('react'),
 //    Link = Router.Link;
 
 module.exports = React.createClass({
-    mixins: [Router.Navigation],
+    contextTypes: {router: React.PropTypes.func},
     render: function() {
         return (
             <div className="page-main">
-                <PageHeader>Dashboard <small>Insert fancy dashboard here</small></PageHeader>
+                <PageHeader>Dashboard
+                    <small>Insert fancy dashboard here</small>
+                </PageHeader>
             </div>
         );
     }

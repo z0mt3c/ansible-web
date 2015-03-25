@@ -8,8 +8,10 @@ var Actions = require('../../actions/inventoryActions');
 var Stores = require('../../stores/inventoryStores');
 
 var InventoryList = React.createClass({
-    mixins: [Router.Navigation, Reflux.connect(Stores.List, 'list'), ListMixin],
-    getListAction() { return Actions.list; },
+    contextTypes: {router: React.PropTypes.func}, mixins: [Reflux.connect(Stores.List, 'list'), ListMixin],
+    getListAction() {
+        return Actions.list;
+    },
     columns: [
         {field: 'name', title: 'Name', filter: true, sort: true},
         {field: 'actions', title: 'Actions', filter: false, sort: false, hide: true, className: 'actions'}
@@ -34,7 +36,7 @@ var InventoryList = React.createClass({
     },
     edit(obj, e) {
         e.preventDefault();
-        this.transitionTo('inventory_edit', {id: obj.id});
+        this.context.router.transitionTo('inventory_edit', {id: obj.id});
     },
     delete(obj, e) {
         e.preventDefault();
@@ -48,11 +50,11 @@ var InventoryList = React.createClass({
 });
 
 module.exports = React.createClass({
-    mixins: [Router.Navigation],
+    contextTypes: {router: React.PropTypes.func},
     componentDidMount() {
     },
     createInventory() {
-        this.transitionTo('inventory_create');
+        this.context.router.transitionTo('inventory_create');
     },
     render() {
         return (

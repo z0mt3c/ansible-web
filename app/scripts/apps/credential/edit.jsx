@@ -8,9 +8,12 @@ var Actions = require('../../actions/credentialActions');
 var Stores = require('../../stores/credentialStores');
 
 var CredentialForm = React.createClass({
-    mixins: [Router.State, Reflux.connect(Stores.Get), React.addons.LinkedStateMixin],
+    mixins: [Reflux.connect(Stores.Get), React.addons.LinkedStateMixin],
+    contextTypes: {
+        router: React.PropTypes.func
+    },
     componentDidMount() {
-        var params = this.getParams();
+        var params = this.context.router.getCurrentParams();
 
         if (params.id) {
             Actions.get(params.id);
@@ -27,7 +30,7 @@ var CredentialForm = React.createClass({
     },
     submit(e) {
         e.preventDefault();
-        var params = this.getParams();
+        var params = this.context.router.getCurrentParams();
 
         if (params.id) {
             Actions.update.triggerPromise(this.state).then(this.completed, this.failed);
@@ -45,7 +48,7 @@ var CredentialForm = React.createClass({
         var reader = new FileReader();
 
         reader.onload = function(e) {
-            this.setState({ sshKey: e.target.result });
+            this.setState({sshKey: e.target.result});
         }.bind(this);
 
         reader.readAsText(file, 'utf8');
@@ -69,8 +72,9 @@ var CredentialForm = React.createClass({
 
         var form = null;
 
-        if (this.state.type ==='machine') {
-            form = (<div><Input type="text" label="SSH User" labelClassName="col-sm-2" wrapperClassName="col-sm-10" valueLink={this.linkState('sshUser')} bsStyle={bsStyle.sshUser}/>
+        if (this.state.type === 'machine') {
+            form = (<div>
+                <Input type="text" label="SSH User" labelClassName="col-sm-2" wrapperClassName="col-sm-10" valueLink={this.linkState('sshUser')} bsStyle={bsStyle.sshUser}/>
 
                 <Input type="select" label="SSH Auth Type" labelClassName="col-sm-2" wrapperClassName="col-sm-10" valueLink={this.linkState('sshAuthType')} bsStyle={bsStyle.sshAuthType}>
                     <option value="">Choose</option>
@@ -110,14 +114,14 @@ var CredentialForm = React.createClass({
 });
 
 module.exports = React.createClass({
-    mixins: [Router.Navigation, Router.State],
-    componentDidMount() {
+    contextTypes: {
+        router: React.PropTypes.func
     },
     save() {
-        this.transitionTo('credential_list');
+        this.context.router.transitionTo('credential_list');
     },
     render() {
-        var params = this.getParams();
+        var params = this.context.router.getCurrentParams();
 
         return (
             <div className="page-main">

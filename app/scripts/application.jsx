@@ -17,16 +17,16 @@ var pageItems = [
 ];
 
 module.exports = React.createClass({
-    mixins: [Router.Navigation, Router.State],
+    contextTypes: {router: React.PropTypes.func},
 
     render: function() {
         var self = this;
 
         var items = _.map(pageItems, function(obj, i) {
-            var isActive = self.isActive(obj.to, obj.params, obj.query);
+            var isActive = self.context.router.isActive(obj.to, obj.params, obj.query);
             return <NavItem
                 key={i}
-                onSelect={() => self.transitionTo(obj.to, obj.params, obj.query)}
+                onSelect={() => self.context.router.transitionTo(obj.to, obj.params, obj.query)}
                 active={isActive}>{obj.text}</NavItem>;
         });
 

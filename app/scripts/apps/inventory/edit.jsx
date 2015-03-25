@@ -68,7 +68,7 @@ var InventoryGroup = React.createClass({
     changeAttribute(key, data) {
         var group = this.state.group;
         group[key] = data;
-        this.setState({ group: group });
+        this.setState({group: group});
     },
     remove() {
         this.props.onRemove(this.state);
@@ -107,7 +107,7 @@ var InventoryGroup = React.createClass({
                 <Input type="select" wrapperClassName="col-sm-12" placeholder="Groupname" valueLink={this.linkState('_groupName')} buttonAfter={<Button bsStyle="primary" onClick={this.addGroup}>ADD</Button>}>
                     <option value="">Select child group</option>
                 {_.map(groups, function(group) {
-                    return <option value={group}>{group}</option>;
+                    return <option value={group} key={group}>{group}</option>;
                 })}
                 </Input>
             </div>
@@ -147,10 +147,9 @@ var InventoryGroups = React.createClass({
             </Button>
         </span>;
 
-        return <Panel header={header} eventKey={i}>
+        return <Panel header={header} eventKey={i} key={group.name + i}>
             <InventoryGroup
                 group={group}
-                key={group.name + i}
                 availableGroups={availableGroups}
                 onChange={this.onGroupChanged.bind(null, i)}
                 onRemove={this.removeGroup.bind(null, group)}
@@ -192,9 +191,12 @@ var InventoryGroups = React.createClass({
 
 
 var InventoryForm = React.createClass({
-    mixins: [Router.State, Reflux.connect(Stores.Get), React.addons.LinkedStateMixin],
+    mixins: [Reflux.connect(Stores.Get), React.addons.LinkedStateMixin],
+    contextTypes: {
+        router: React.PropTypes.func
+    },
     componentDidMount() {
-        var params = this.getParams();
+        var params = this.context.router.getCurrentParams();
 
         if (params.id) {
             Actions.get(params.id);
@@ -211,7 +213,7 @@ var InventoryForm = React.createClass({
     },
     submit(e) {
         e.preventDefault();
-        var params = this.getParams();
+        var params = this.context.router.getCurrentParams();
 
         if (params.id) {
             Actions.update.triggerPromise(this.state).then(this.completed, this.failed);
@@ -262,14 +264,14 @@ var InventoryForm = React.createClass({
 });
 
 module.exports = React.createClass({
-    mixins: [Router.Navigation, Router.State],
+    contextTypes: {router: React.PropTypes.func},
     componentDidMount() {
     },
     save() {
-        this.transitionTo('inventory_list');
+        this.context.router.transitionTo('inventory_list');
     },
     render() {
-        var params = this.getParams();
+        var params = this.context.router.getCurrentParams();
 
         return (
             <div className="page-main">

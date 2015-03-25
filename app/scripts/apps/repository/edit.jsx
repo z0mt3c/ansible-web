@@ -8,16 +8,17 @@ var Actions = require('../../actions/repositoryActions');
 var Stores = require('../../stores/repositoryStores');
 
 module.exports = React.createClass({
-    mixins: [Router.Navigation, Router.State, Reflux.connect(Stores.Get), React.addons.LinkedStateMixin, Reflux.ListenerMixin],
+    contextTypes: {router: React.PropTypes.func},
+    mixins: [Reflux.connect(Stores.Get), React.addons.LinkedStateMixin, Reflux.ListenerMixin],
     componentDidMount: function() {
-        var params = this.getParams();
+        var params = this.context.router.getCurrentParams();
 
         if (params.id) {
             Actions.get(params.id);
         }
     },
     completed: function() {
-        this.transitionTo('repository_list');
+        this.context.router.transitionTo('repository_list');
     },
     failed: function(xhr) {
         var error = JSON.parse(xhr.response);
@@ -27,7 +28,7 @@ module.exports = React.createClass({
     },
     submit: function(e) {
         e.preventDefault();
-        var params = this.getParams();
+        var params = this.context.router.getCurrentParams();
 
         if (params.id) {
             Actions.update.triggerPromise(this.state).then(this.completed, this.failed);
@@ -36,7 +37,7 @@ module.exports = React.createClass({
         }
     },
     render: function() {
-        var params = this.getParams();
+        var params = this.context.router.getCurrentParams();
         var error = '';
         var state = this.state;
 

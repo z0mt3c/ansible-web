@@ -9,8 +9,10 @@ var Actions = require('../../actions/repositoryActions');
 var Stores = require('../../stores/repositoryStores');
 
 var RepositoryList = React.createClass({
-    mixins: [Router.Navigation, Reflux.connect(Stores.List, 'list'), ListMixin],
-    getListAction() { return Actions.list; },
+    contextTypes: {router: React.PropTypes.func}, mixins: [Reflux.connect(Stores.List, 'list'), ListMixin],
+    getListAction() {
+        return Actions.list;
+    },
     columns: [
         {field: 'name', title: 'Name', filter: true, sort: true},
         {field: 'type', title: 'Type', filter: true, sort: true},
@@ -45,7 +47,7 @@ var RepositoryList = React.createClass({
     },
     edit(obj, e) {
         e.preventDefault();
-        this.transitionTo('repository_edit', {id: obj.id});
+        this.context.router.transitionTo('repository_edit', {id: obj.id});
     },
     delete(obj, e) {
         e.preventDefault();
@@ -57,7 +59,7 @@ var RepositoryList = React.createClass({
         e.preventDefault();
         e.stopPropagation();
         Actions.sync.triggerPromise(obj.id).then(function(data) {
-            this.transitionTo('run_detail', {id: data.runId});
+            this.context.router.transitionTo('run_detail', {id: data.runId});
         }.bind(this));
     },
     render() {
@@ -66,11 +68,11 @@ var RepositoryList = React.createClass({
 });
 
 module.exports = React.createClass({
-    mixins: [Router.Navigation],
+    contextTypes: {router: React.PropTypes.func},
     componentDidMount() {
     },
     createRepository() {
-        this.transitionTo('repository_create');
+        this.context.router.transitionTo('repository_create');
     },
     render() {
         return (

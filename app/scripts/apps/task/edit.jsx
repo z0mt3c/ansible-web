@@ -99,9 +99,12 @@ var SelectPlaybook = React.createClass({
 
 
 var JobForm = React.createClass({
-    mixins: [Router.State, Reflux.connect(Stores.Get), React.addons.LinkedStateMixin, Reflux.ListenerMixin],
+    mixins: [Reflux.connect(Stores.Get), React.addons.LinkedStateMixin, Reflux.ListenerMixin],
+    contextTypes: {
+        router: React.PropTypes.func
+    },
     componentDidMount() {
-        var params = this.getParams();
+        var params = this.context.router.getCurrentParams();
 
         if (params.id) {
             Actions.get(params.id);
@@ -118,7 +121,7 @@ var JobForm = React.createClass({
     },
     submit(e) {
         e.preventDefault();
-        var params = this.getParams();
+        var params = this.context.router.getCurrentParams();
 
         if (params.id) {
             Actions.update.triggerPromise(this.state).then(this.completed, this.failed);
@@ -193,14 +196,14 @@ var JobForm = React.createClass({
 });
 
 module.exports = React.createClass({
-    mixins: [Router.Navigation, Router.State],
+    contextTypes: {router: React.PropTypes.func},
     componentDidMount() {
     },
     save() {
-        this.transitionTo('task_list');
+        this.context.router.transitionTo('task_list');
     },
     render() {
-        var params = this.getParams();
+        var params = this.context.router.getCurrentParams();
 
         return (
             <div className="page-main">

@@ -46,7 +46,7 @@ var Stores = require('../../stores/runStores');
  */
 
 var RunList = React.createClass({
-    mixins: [Router.Navigation, Reflux.connect(Stores.List, 'list'), ListMixin],
+    contextTypes: {router: React.PropTypes.func}, mixins: [Reflux.connect(Stores.List, 'list'), ListMixin],
     getListAction() {
         return Actions.list;
     },
@@ -72,7 +72,7 @@ var RunList = React.createClass({
     },
     clickItem(obj, e) {
         e.preventDefault();
-        this.transitionTo('run_detail', {id: obj.id});
+        this.context.router.transitionTo('run_detail', {id: obj.id});
     },
     render() {
         return this._render();
@@ -80,7 +80,7 @@ var RunList = React.createClass({
 });
 
 module.exports = React.createClass({
-    mixins: [Router.Navigation],
+    contextTypes: {router: React.PropTypes.func},
     componentDidMount() {
     },
     render() {

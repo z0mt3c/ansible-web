@@ -73,13 +73,13 @@ var PlaybookStats = React.createClass({
         return (<ListGroupItem header={title}>
             <Table responsive condensed striped>
                 <thead>
-                <tr>
-                    <th>Host</th>
-                    <th>OK</th>
-                    <th>Failed</th>
-                    <th>Unreachable</th>
-                    <th>Changed</th>
-                </tr>
+                    <tr>
+                        <th>Host</th>
+                        <th>OK</th>
+                        <th>Failed</th>
+                        <th>Unreachable</th>
+                        <th>Changed</th>
+                    </tr>
                 </thead>
                 <tbody>
                 {results}
@@ -90,12 +90,12 @@ var PlaybookStats = React.createClass({
 });
 
 module.exports = React.createClass({
-    mixins: [Router.Navigation, Router.State, Reflux.connect(Stores.Get), Reflux.ListenerMixin],
+    contextTypes: {router: React.PropTypes.func}, mixins: [Reflux.connect(Stores.Get), Reflux.ListenerMixin],
     componentDidMount: function() {
         this.load();
     },
     load: function() {
-        var params = this.getParams();
+        var params = this.context.router.getCurrentParams();
         Actions.get(params.id);
     },
     render: function() {
@@ -117,7 +117,9 @@ module.exports = React.createClass({
         }, []);
 
         var processExited = this.state.exitCode !== undefined;
-        var exit = processExited ? <p className="exit" data-code={this.state.exitCode}><a/><span>Done. Process exited with exit code {this.state.exitCode}.</span>
+        var exit = processExited ? <p className="exit" data-code={this.state.exitCode}>
+            <a/>
+            <span>Done. Process exited with exit code {this.state.exitCode}.</span>
         </p> : null;
 
         return (
