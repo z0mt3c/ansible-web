@@ -1,5 +1,5 @@
 var React = require('react/addons'),
-    Router = require('react-router'),
+
     { TabbedArea, TabPane, Table, PageHeader, ListGroup, ListGroupItem, Label } = require('react-bootstrap'),
     _ = require('lodash');
 

@@ -1,5 +1,5 @@
 var React = require('react'),
-    Router = require('react-router'),
+
     { PageHeader } = require('react-bootstrap');
 //    Link = Router.Link;
 

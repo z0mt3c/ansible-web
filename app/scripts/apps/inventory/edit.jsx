@@ -1,5 +1,5 @@
 var React = require('react/addons'),
-    Router = require('react-router'),
+
     { Alert, Button, Input, PageHeader, ListGroupItem, ListGroup, Panel, PanelGroup } = require('react-bootstrap'),
     _ = require('lodash');
 var Icon = require('../../components/icon');

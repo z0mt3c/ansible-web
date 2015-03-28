@@ -1,5 +1,5 @@
 var React = require('react/addons'),
-    Router = require('react-router'),
+
     { PageHeader } = require('react-bootstrap'),
     ListMixin = require('../../mixins/list');
 //{ IntlMixin, Formatte;Relative, FormattedDate, FormattedTime } = require('react-intl'),

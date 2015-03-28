@@ -1,5 +1,5 @@
 var React = require('react/addons'),
-    Router = require('react-router'),
+
     { Button, PageHeader } = require('react-bootstrap'),
     ListMixin = require('../../mixins/list'),
     Icon = require('../../components/icon');

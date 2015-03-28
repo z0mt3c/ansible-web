@@ -1,5 +1,5 @@
 var React = require('react/addons'),
-    Router = require('react-router'),
+
     { Alert, Input, PageHeader } = require('react-bootstrap'),
     _ = require('lodash');
 
